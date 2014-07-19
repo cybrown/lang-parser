@@ -20,141 +20,220 @@
 ">"                   return '>'
 ","                   return ','
 "="                   return '='
+";"                   return ';'
 <<EOF>>               return 'EOF'
 .                     return 'INVALID'
 
 /lex
 
-%left '='
-%left ','
-%left ARROW
-%left '<' '>'
-%left '+' '-'
-%left '*' '/' '%'
-%left UMINUS
-
-%start Root
+%start Program
 
 %%
 
-Root
-    : Expression EOF
+Program
+    : Statement EOF
+        {return [$1];}
+    | StatementList EOF
         {return $1;}
     ;
 
-Expression
-    : Expression ',' Expression
+Statement
+    : Expression ';'
+        {$$ = $1;}
+    | BlockStatement
+        {$$ = $1;}
+    ;
+
+StatementList
+    : Statement Statement
+        {$$ = [$1, $2];}
+    | StatementList Statement
         {
-            if (!Array.isArray($1)) {
-                $1 = [$1];
-            }
-            $1.push($3);
+            $1.push($2);
             $$ = $1;
         }
-    | Expression '=' Expression
-        {
-            $$ = yy.node.CallExpression(
-                yy.node.Identifier($2),
-                [$1, $3]
-            );
-        }
-    | Expression '+' Expression
-        {
-            $$ = yy.node.CallExpression(
-                yy.node.Identifier($2),
-                [$1, $3]
-            );
-        }
-    | Expression '<' Expression
-        {
-            $$ = yy.node.CallExpression(
-                yy.node.Identifier($2),
-                [$1, $3]
-            );
-        }
-    | Expression '>' Expression
-        {
-            $$ = yy.node.CallExpression(
-                yy.node.Identifier($2),
-                [$1, $3]
-            );
-        }
-    | Expression '-' Expression
-        {
-            $$ = yy.node.CallExpression(
-                yy.node.Identifier($2),
-                [$1, $3]
-            );
-        }
-    | Expression '%' Expression
-        {
-            $$ = yy.node.CallExpression(
-                yy.node.Identifier($2),
-                [$1, $3]
-            );
-        }
-    | Expression '*' Expression
-        {
-            $$ = yy.node.CallExpression(
-                yy.node.Identifier($2),
-                [$1, $3]
-            );
-        }
-    | Expression '/' Expression
-        {
-            $$ = yy.node.CallExpression(
-                yy.node.Identifier($2),
-                [$1, $3]
-            );
-        }
-    | '-' Expression %prec UMINUS
-        {
-            $$ = yy.node.CallExpression(
-                yy.node.Identifier($1),
-                [$2]
-            );
-        }
-    | LambdaExpression
-        {$$ = $1;}
-    | ParenthesisExpression
-        {$$ = $1;}
-    | BlockExpression
-        {$$ = $1;}
-    | BracketExpression
-        {$$ = $1;}
-    | LITERAL_NUMBER
-        {$$ = yy.node.Literal(yytext);}
-    | IDENTIFIER
-        {$$ = yy.node.Identifier(yytext);}
     ;
 
-BlockExpression
-    : '{' Expression '}'
-        {$$ = yy.node.BlockExpression($2);}
+BlockStatement
+    : '{' Statement '}'
+        {$$ = yy.node.BlockStatement([$2]);}
+    | '{' StatementList '}'
+        {$$ = yy.node.BlockStatement($2);}
     | '{' '}'
-        {$$ = yy.node.BlockExpression();}
+        {$$ = yy.node.BlockStatement();}
     ;
 
-BracketExpression
-    : '[' Expression ']'
-        {$$ = yy.node.BracketExpression($2);}
-    | '[' ']'
-        {$$ = yy.node.BracketExpression();}
+Expression
+    : AffectionExpression
+        {$$ = $1;}
     ;
 
-ParenthesisExpression
-    : '(' Expression ')'
-        {$$ = $2;}
-    | '(' ')'
-        {$$ = [];}
+AffectionExpression
+    : LambdaExpression
+        {$$ = $1;}
+    | AffectionExpression '=' LambdaExpression
+        {
+            $$ = yy.node.CallExpression(
+                yy.node.Identifier($2),
+                [$1, $3]
+            );
+        }
     ;
 
 LambdaExpression
-    : Expression ARROW Expression
+    : ComparisonExpression
+        {$$ = $1;}
+    | '(' ')' ARROW ComparisonExpression
+        {$$ = yy.node.LambdaExpression([], $4);}
+    | ParanthesisExpression ARROW ComparisonExpression
         {
-            $$ = yy.node.LambdaExpression(
-                !Array.isArray($1) ? [$1] : $1,
-                $3
+            if (!$1.type || $1.type !== 'Identifier') {
+                throw new Error('Lambda arguments can only be identifiers');
+            }
+            $$ = yy.node.LambdaExpression([$1], $3);
+        }
+    | IDENTIFIER ARROW ComparisonExpression
+        {$$ = yy.node.LambdaExpression([yy.node.Identifier($1)], $3);}
+    | '(' IdentifierList ')' ARROW ComparisonExpression
+        {$$ = yy.node.LambdaExpression($2, $5);}
+    ;
+
+ComparisonExpression
+    : AdditiveExpression
+        {$$ = $1;}
+    | ComparisonExpression '<' AdditiveExpression
+        {
+            $$ = yy.node.CallExpression(
+                yy.node.Identifier($2),
+                [$1, $3]
             );
+        }
+    | ComparisonExpression '>' AdditiveExpression
+        {
+            $$ = yy.node.CallExpression(
+                yy.node.Identifier($2),
+                [$1, $3]
+            );
+        }
+    ;
+
+AdditiveExpression
+    : MultiplicativeExpression
+        {$$ = $1;}
+    | AdditiveExpression '+' MultiplicativeExpression
+        {
+            $$ = yy.node.CallExpression(
+                yy.node.Identifier($2),
+                [$1, $3]
+            );
+        }
+    | AdditiveExpression '-' MultiplicativeExpression
+        {
+            $$ = yy.node.CallExpression(
+                yy.node.Identifier($2),
+                [$1, $3]
+            );
+        }
+    ;
+
+MultiplicativeExpression
+    : PrefixExpression
+        {$$ = $1;}
+    | MultiplicativeExpression '*' PrefixExpression
+        {
+            $$ = yy.node.CallExpression(
+                yy.node.Identifier($2),
+                [$1, $3]
+            );
+        }
+    | MultiplicativeExpression '/' PrefixExpression
+        {
+            $$ = yy.node.CallExpression(
+                yy.node.Identifier($2),
+                [$1, $3]
+            );
+        }
+    | MultiplicativeExpression '%' PrefixExpression
+        {
+            $$ = yy.node.CallExpression(
+                yy.node.Identifier($2),
+                [$1, $3]
+            );
+        }
+    ;
+
+PrefixExpression
+    : PostfixExpression
+        {$$ = $1;}
+    | '-' PrefixExpression
+        {
+            $$ = yy.node.CallExpression(
+                yy.node.Identifier($1),
+                [$1]
+            );
+        }
+    ;
+
+PostfixExpression
+    : PrimaryExpression
+        {$$ = $1;}
+    | PostfixExpression '(' ')'
+        {$$ = yy.node.CallExpression($1, []);}
+    | PostfixExpression '(' ArgumentList ')'
+        {$$ = yy.node.CallExpression($1, $3);}
+    ;
+
+PrimaryExpression
+    : LITERAL_NUMBER
+        {$$ = yy.node.Literal(yytext);}
+    | IDENTIFIER
+        {$$ = yy.node.Identifier(yytext);}
+    | ParanthesisExpression
+        {$$ = $1;}
+    | '[' ']'
+        {$$ = yy.node.BracketExpression([]);}
+    | '[' Expression ']'
+        {$$ = yy.node.BracketExpression($2);}
+    | '[' ExpressionList ']'
+        {$$ = yy.node.BracketExpression($2);}
+    ;
+
+ParanthesisExpression
+    : '(' Expression ')'
+        {$$ = $2;}
+    ;
+
+ExpressionList
+    : Expression ',' Expression
+        {$$ = [$1, $3];}
+    | ExpressionList ',' Expression
+        {
+            $1.push($3);
+            $$ = $1;
+        }
+    ;
+
+ArgumentList
+    : Expression
+        {$$ = [$1];}
+    | ArgumentList ',' Expression
+        {
+            $1.push($3);
+            $$ = $1;
+        }
+    ;
+
+IdentifierList
+    : IDENTIFIER ',' IDENTIFIER
+        {
+            $$ = [
+                yy.node.Identifier($1),
+                yy.node.Identifier($3)
+            ];
+        }
+    | IdentifierList ',' IDENTIFIER
+        {
+            $1.push(yy.node.Identifier($3));
+            $$ = $1;
         }
     ;
