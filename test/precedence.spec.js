@@ -11,6 +11,14 @@ describe ('Precedence', function () {
         assert.strictEqual(ast.body[0].expression.right.value, '3');
     });
 
+    it ('. and []', function () {
+        var ast = parser.parse('a[b].c;');
+        assert.strictEqual(ast.body[0].expression.type, 'MemberExpression');
+        assert.strictEqual(ast.body[0].expression.object.object.name, 'a');
+        assert.strictEqual(ast.body[0].expression.object.property.name, 'b');
+        assert.strictEqual(ast.body[0].expression.property.name, 'c');
+    });
+
     it ('* over +', function () {
         var ast = parser.parse('1 * 2 + 3;');
         assert.strictEqual(ast.body[0].expression.type, 'BinaryExpression');

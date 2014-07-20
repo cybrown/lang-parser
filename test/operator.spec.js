@@ -13,11 +13,6 @@ describe ('Operator', function () {
         assert.strictEqual(ast.body[0].expression.right.name, 'baz');
     });
 
-    it ('should parse unary operator -', function () {
-        var ast = parser.parse('- baz;');
-        assert.strictEqual(ast.body[0].expression.operator, '-');
-    });
-
     it ('should parse operator ? :', function () {
         var ast = parser.parse('1 + 3 ? 4 : 5;');
         assert.strictEqual(ast.body[0].expression.type, 'ConditionalExpression');

@@ -24,7 +24,11 @@
 ">>"                  return 'SHR'
 "&&"                  return 'AND'
 "||"                  return 'OR'
+"++"                  return 'INC'
+"--"                  return 'DEC'
 "*"                   return '*'
+"!"                   return '!'
+"~"                   return '~'
 "%"                   return '%'
 "/"                   return '/'
 "-"                   return '-'
@@ -45,6 +49,7 @@
 "&"                   return '&'
 "|"                   return '|'
 "^"                   return '^'
+"."                   return '.'
 <<EOF>>               return 'EOF'
 .                     return 'INVALID'
 
@@ -315,16 +320,37 @@ PrefixExpression
     : PostfixExpression
         {$$ = $1;}
     | '-' PrefixExpression
-        {$$ = yy.node.UnaryExpression($1, [$1]);}
+        {$$ = yy.node.UnaryExpression($1, $2);}
+    | '!' PrefixExpression
+        {$$ = yy.node.UnaryExpression($1, $2);}
+    | '~' PrefixExpression
+        {$$ = yy.node.UnaryExpression($1, $2);}
+    | INC PrefixExpression
+        {$$ = yy.node.UnaryExpression($1, $2);}
+    | DEC PrefixExpression
+        {$$ = yy.node.UnaryExpression($1, $2);}
     ;
 
 PostfixExpression
-    : PrimaryExpression
+    : MemberExpression
         {$$ = $1;}
+    | PostfixExpression INC
+        {$$ = yy.node.UnaryExpression($2, $1);}
+    | PostfixExpression DEC
+        {$$ = yy.node.UnaryExpression($2, $1);}
     | PostfixExpression '(' ')'
         {$$ = yy.node.CallExpression($1, []);}
     | PostfixExpression '(' CallArgumentList ')'
         {$$ = yy.node.CallExpression($1, $3);}
+    ;
+
+MemberExpression
+    : PrimaryExpression
+        {$$ = $1;}
+    | MemberExpression '.' IDENTIFIER
+        {$$ = yy.node.MemberExpression($1, yy.node.Identifier($3));}
+    | MemberExpression '[' Expression ']'
+        {$$ = yy.node.MemberExpression($1, $3);}
     ;
 
 PrimaryExpression
