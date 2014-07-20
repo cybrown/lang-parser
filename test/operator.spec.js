@@ -39,8 +39,9 @@ describe ('Operator', function () {
     });
 
     it ('should parse operator =', function () {
-        var ast = parser.parse('1 = baz;');
-        assert.strictEqual(ast.body[0].expression.callee.name, '=');
+        var ast = parser.parse('baz = 1;');
+        assert.strictEqual(ast.body[0].expression.type, 'AssignmentExpression');
+        assert.strictEqual(ast.body[0].expression.operator, '=');
     });
 
     it ('should parse operator <', function () {

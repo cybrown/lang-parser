@@ -132,20 +132,15 @@ Type
 /* Expressions */
 
 Expression
-    : AffectionExpression
+    : AssignmentExpression
         {$$ = $1;}
     ;
 
-AffectionExpression
+AssignmentExpression
     : LambdaExpression
         {$$ = $1;}
-    | AffectionExpression '=' LambdaExpression
-        {
-            $$ = yy.node.CallExpression(
-                yy.node.Identifier($2),
-                [$1, $3]
-            );
-        }
+    | AssignmentExpression '=' LambdaExpression
+        {$$ = yy.node.AssignmentExpression($2, $1, $3);}
     ;
 
 LambdaExpression
