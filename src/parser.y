@@ -34,9 +34,9 @@
 
 Program
     : Statement EOF
-        {return [$1];}
+        {return yy.node.Program([$1]);}
     | StatementList EOF
-        {return $1;}
+        {return yy.node.Program($1);}
     ;
 
 Statement

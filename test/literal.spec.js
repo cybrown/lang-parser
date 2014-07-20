@@ -5,7 +5,7 @@ describe ('Literal', function () {
 
     it ('should parse a number', function () {
         var ast = parser.parse('1;');
-        assert.strictEqual(ast[0].expression.type, 'Literal');
-        assert.strictEqual(ast[0].expression.value, '1');
+        assert.strictEqual(ast.body[0].expression.type, 'Literal');
+        assert.strictEqual(ast.body[0].expression.value, '1');
     });
 });
