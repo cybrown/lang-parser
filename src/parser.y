@@ -6,6 +6,12 @@
 [0-9]+("."[0-9]+)?\b  return 'LITERAL_NUMBER'
 [a-zA-Z_]+[0-9a-zA-Z_]* return 'IDENTIFIER'
 "=>"                  return 'ARROW'
+"=="                  return 'EQ'
+"!="                  return 'NE'
+"<="                  return 'LE'
+">="                  return 'GE'
+"<<"                  return 'SHL'
+">>"                  return 'SHR'
 "*"                   return '*'
 "%"                   return '%'
 "/"                   return '/'
@@ -24,6 +30,9 @@
 ";"                   return ';'
 "?"                   return '?'
 ":"                   return ':'
+"&"                   return '&'
+"|"                   return '|'
+"^"                   return '^'
 <<EOF>>               return 'EOF'
 .                     return 'INVALID'
 
@@ -181,18 +190,60 @@ LambdaExpression
     ;
 
 ConditionalExpression
-    : ComparisonExpression
+    : BitwiseOrExpression
         {$$ = $1;}
-    | ComparisonExpression '?' Expression ':' ConditionalExpression
+    | BitwiseOrExpression '?' Expression ':' ConditionalExpression
         {$$ = yy.node.ConditionalExpression($1, $3, $5);}
     ;
 
-ComparisonExpression
-    : AdditiveExpression
+BitwiseOrExpression
+    : BitwiseXorExpression
         {$$ = $1;}
-    | ComparisonExpression '<' AdditiveExpression
+    | BitwiseOrExpression '|' BitwiseXorExpression
         {$$ = yy.node.BinaryExpression($2, $1, $3);}
-    | ComparisonExpression '>' AdditiveExpression
+    ;
+
+BitwiseXorExpression
+    : BitwiseAndExpression
+        {$$ = $1;}
+    | BitwiseXorExpression '^' BitwiseAndExpression
+        {$$ = yy.node.BinaryExpression($2, $1, $3);}
+    ;
+
+BitwiseAndExpression
+    : EqualityExpression
+        {$$ = $1;}
+    | BitwiseAndExpression '&' EqualityExpression
+        {$$ = yy.node.BinaryExpression($2, $1, $3);}
+    ;
+
+EqualityExpression
+    : ComparisonExpression
+        {$$ = $1;}
+    | EqualityExpression EQ ComparisonExpression
+        {$$ = yy.node.BinaryExpression($2, $1, $3);}
+    | EqualityExpression NE ComparisonExpression
+        {$$ = yy.node.BinaryExpression($2, $1, $3);}
+    ;
+
+ComparisonExpression
+    : ShiftExpression
+        {$$ = $1;}
+    | ComparisonExpression '<' ShiftExpression
+        {$$ = yy.node.BinaryExpression($2, $1, $3);}
+    | ComparisonExpression '>' ShiftExpression
+        {$$ = yy.node.BinaryExpression($2, $1, $3);}
+    | ComparisonExpression LE ShiftExpression
+        {$$ = yy.node.BinaryExpression($2, $1, $3);}
+    | ComparisonExpression GE ShiftExpression
+        {$$ = yy.node.BinaryExpression($2, $1, $3);}
+    ;
+
+ShiftExpression
+    : AdditiveExpression
+    | ShiftExpression SHL AdditiveExpression
+        {$$ = yy.node.BinaryExpression($2, $1, $3);}
+    | ShiftExpression SHR AdditiveExpression
         {$$ = yy.node.BinaryExpression($2, $1, $3);}
     ;
 

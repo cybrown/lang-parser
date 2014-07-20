@@ -13,45 +13,15 @@ describe ('Operator', function () {
         assert.strictEqual(ast.body[0].expression.right.name, 'baz');
     });
 
-    it ('should parse operator -', function () {
-        var ast = parser.parse('1 - baz;');
-        assert.strictEqual(ast.body[0].expression.operator, '-');
-    });
-
     it ('should parse unary operator -', function () {
         var ast = parser.parse('- baz;');
         assert.strictEqual(ast.body[0].expression.operator, '-');
-    });
-
-    it ('should parse operator *', function () {
-        var ast = parser.parse('1 * baz;');
-        assert.strictEqual(ast.body[0].expression.operator, '*');
-    });
-
-    it ('should parse operator /', function () {
-        var ast = parser.parse('1 / baz;');
-        assert.strictEqual(ast.body[0].expression.operator, '/');
-    });
-
-    it ('should parse operator %', function () {
-        var ast = parser.parse('1 % baz;');
-        assert.strictEqual(ast.body[0].expression.operator, '%');
     });
 
     it ('should parse operator =', function () {
         var ast = parser.parse('baz = 1;');
         assert.strictEqual(ast.body[0].expression.type, 'AssignmentExpression');
         assert.strictEqual(ast.body[0].expression.operator, '=');
-    });
-
-    it ('should parse operator <', function () {
-        var ast = parser.parse('1 < baz;');
-        assert.strictEqual(ast.body[0].expression.operator, '<');
-    });
-
-    it ('should parse operator >', function () {
-        var ast = parser.parse('1 > baz;');
-        assert.strictEqual(ast.body[0].expression.operator, '>');
     });
 
     it ('should parse operator ? :', function () {
