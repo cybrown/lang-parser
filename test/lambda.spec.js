@@ -36,7 +36,7 @@ describe ('Lambda', function () {
     });
 
     it ('should parse a lambda with 2 arguments', function () {
-        var ast = parser.parse('(x, y) => (x + 1);');
+        var ast = parser.parse('(x, y) => x + 1;');
         assert.strictEqual(ast.body[0].expression.type, 'LambdaExpression');
         assert.strictEqual(ast.body[0].expression.params.length, 2);
         assert.strictEqual(ast.body[0].expression.params[0].type, 'Identifier');
@@ -44,5 +44,16 @@ describe ('Lambda', function () {
         assert.strictEqual(ast.body[0].expression.params[1].type, 'Identifier');
         assert.strictEqual(ast.body[0].expression.params[1].name, 'y');
         assert.strictEqual(ast.body[0].expression.body.type, 'CallExpression');
+    });
+
+    it ('should parse a lambda with 2 arguments', function () {
+        var ast = parser.parse('(x, y) => {x + 1;};');
+        assert.strictEqual(ast.body[0].expression.type, 'LambdaExpression');
+        assert.strictEqual(ast.body[0].expression.params.length, 2);
+        assert.strictEqual(ast.body[0].expression.params[0].type, 'Identifier');
+        assert.strictEqual(ast.body[0].expression.params[0].name, 'x');
+        assert.strictEqual(ast.body[0].expression.params[1].type, 'Identifier');
+        assert.strictEqual(ast.body[0].expression.params[1].name, 'y');
+        assert.strictEqual(ast.body[0].expression.body.type, 'BlockExpression');
     });
 });

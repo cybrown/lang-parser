@@ -164,6 +164,8 @@ LambdaExpression
         {$$ = yy.node.LambdaExpression([yy.node.Identifier($1)], $3);}
     | '(' LambdaParameterList ')' ARROW ConditionalExpression
         {$$ = yy.node.LambdaExpression($2, $5);}
+    | '(' LambdaParameterList ')' ARROW BlockStatement
+        {$$ = yy.node.LambdaExpression($2, $5);}
     ;
 
 ConditionalExpression
