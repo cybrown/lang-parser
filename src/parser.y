@@ -40,10 +40,24 @@ Program
     ;
 
 Statement
-    : Expression ';'
+    : ExpressionStatement
         {$$ = $1;}
     | BlockStatement
         {$$ = $1;}
+    ;
+
+ExpressionStatement
+    : Expression ';'
+        {$$ = yy.node.ExpressionStatement($1);}
+    ;
+
+BlockStatement
+    : '{' Statement '}'
+        {$$ = yy.node.BlockStatement([$2]);}
+    | '{' StatementList '}'
+        {$$ = yy.node.BlockStatement($2);}
+    | '{' '}'
+        {$$ = yy.node.BlockStatement();}
     ;
 
 StatementList
@@ -54,15 +68,6 @@ StatementList
             $1.push($2);
             $$ = $1;
         }
-    ;
-
-BlockStatement
-    : '{' Statement '}'
-        {$$ = yy.node.BlockStatement([$2]);}
-    | '{' StatementList '}'
-        {$$ = yy.node.BlockStatement($2);}
-    | '{' '}'
-        {$$ = yy.node.BlockStatement();}
     ;
 
 Expression
