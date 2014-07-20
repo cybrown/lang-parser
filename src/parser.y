@@ -321,6 +321,8 @@ PrefixExpression
         {$$ = $1;}
     | '-' PrefixExpression
         {$$ = yy.node.UnaryExpression($1, $2);}
+    | '+' PrefixExpression
+        {$$ = yy.node.UnaryExpression($1, $2);}
     | '!' PrefixExpression
         {$$ = yy.node.UnaryExpression($1, $2);}
     | '~' PrefixExpression
