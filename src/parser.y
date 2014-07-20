@@ -120,6 +120,23 @@ ClassAttribute
 ClassMethod
     : Type IDENTIFIER '(' ')' BlockStatement
         {$$ = yy.node.ClassMethod($2, $1, [], $5);}
+    | Type IDENTIFIER '(' MethodParameterList ')' BlockStatement
+        {$$ = yy.node.ClassMethod($2, $1, $4, $6);}
+    ;
+
+MethodParameterList
+    : MethodParameter
+        {$$ = [$1];}
+    | MethodParameterList MethodParameter
+        {
+            $1.push($2);
+            $$ = $1;
+        }
+    ;
+
+MethodParameter
+    : Type IDENTIFIER
+        {$$ = yy.node.MethodParameter($2, $1);}
     ;
 
 Type

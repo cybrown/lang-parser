@@ -54,6 +54,6 @@ describe ('Lambda', function () {
         assert.strictEqual(ast.body[0].expression.params[0].name, 'x');
         assert.strictEqual(ast.body[0].expression.params[1].type, 'Identifier');
         assert.strictEqual(ast.body[0].expression.params[1].name, 'y');
-        assert.strictEqual(ast.body[0].expression.body.type, 'BlockExpression');
+        assert.strictEqual(ast.body[0].expression.body.type, 'BlockStatement');
     });
 });
