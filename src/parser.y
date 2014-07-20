@@ -182,27 +182,27 @@ Expression
 AssignmentExpression
     : LambdaExpression
         {$$ = $1;}
-    | AssignmentExpression '=' LambdaExpression
+    | LambdaExpression '=' AssignmentExpression
         {$$ = yy.node.AssignmentExpression($2, $1, $3);}
-    | AssignmentExpression ADD_ASSIGN LambdaExpression
+    | LambdaExpression ADD_ASSIGN AssignmentExpression
         {$$ = yy.node.AssignmentExpression($2, $1, $3);}
-    | AssignmentExpression SUB_ASSIGN LambdaExpression
+    | LambdaExpression SUB_ASSIGN AssignmentExpression
         {$$ = yy.node.AssignmentExpression($2, $1, $3);}
-    | AssignmentExpression MUL_ASSIGN LambdaExpression
+    | LambdaExpression MUL_ASSIGN AssignmentExpression
         {$$ = yy.node.AssignmentExpression($2, $1, $3);}
-    | AssignmentExpression DIV_ASSIGN LambdaExpression
+    | LambdaExpression DIV_ASSIGN AssignmentExpression
         {$$ = yy.node.AssignmentExpression($2, $1, $3);}
-    | AssignmentExpression REM_ASSIGN LambdaExpression
+    | LambdaExpression REM_ASSIGN AssignmentExpression
         {$$ = yy.node.AssignmentExpression($2, $1, $3);}
-    | AssignmentExpression SHL_ASSIGN LambdaExpression
+    | LambdaExpression SHL_ASSIGN AssignmentExpression
         {$$ = yy.node.AssignmentExpression($2, $1, $3);}
-    | AssignmentExpression SHR_ASSIGN LambdaExpression
+    | LambdaExpression SHR_ASSIGN AssignmentExpression
         {$$ = yy.node.AssignmentExpression($2, $1, $3);}
-    | AssignmentExpression AND_ASSIGN LambdaExpression
+    | LambdaExpression AND_ASSIGN AssignmentExpression
         {$$ = yy.node.AssignmentExpression($2, $1, $3);}
-    | AssignmentExpression XOR_ASSIGN LambdaExpression
+    | LambdaExpression XOR_ASSIGN AssignmentExpression
         {$$ = yy.node.AssignmentExpression($2, $1, $3);}
-    | AssignmentExpression OR_ASSIGN LambdaExpression
+    | LambdaExpression OR_ASSIGN AssignmentExpression
         {$$ = yy.node.AssignmentExpression($2, $1, $3);}
     ;
 
