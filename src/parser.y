@@ -180,17 +180,11 @@ ComparisonExpression
         {$$ = $1;}
     | ComparisonExpression '<' AdditiveExpression
         {
-            $$ = yy.node.CallExpression(
-                yy.node.Identifier($2),
-                [$1, $3]
-            );
+            $$ = yy.node.BinaryExpression($2, $1, $3);
         }
     | ComparisonExpression '>' AdditiveExpression
         {
-            $$ = yy.node.CallExpression(
-                yy.node.Identifier($2),
-                [$1, $3]
-            );
+            $$ = yy.node.BinaryExpression($2, $1, $3);
         }
     ;
 
@@ -199,17 +193,11 @@ AdditiveExpression
         {$$ = $1;}
     | AdditiveExpression '+' MultiplicativeExpression
         {
-            $$ = yy.node.CallExpression(
-                yy.node.Identifier($2),
-                [$1, $3]
-            );
+            $$ = yy.node.BinaryExpression($2, $1, $3);
         }
     | AdditiveExpression '-' MultiplicativeExpression
         {
-            $$ = yy.node.CallExpression(
-                yy.node.Identifier($2),
-                [$1, $3]
-            );
+            $$ = yy.node.BinaryExpression($2, $1, $3);
         }
     ;
 
@@ -218,24 +206,15 @@ MultiplicativeExpression
         {$$ = $1;}
     | MultiplicativeExpression '*' PrefixExpression
         {
-            $$ = yy.node.CallExpression(
-                yy.node.Identifier($2),
-                [$1, $3]
-            );
+            $$ = yy.node.BinaryExpression($2, $1, $3);
         }
     | MultiplicativeExpression '/' PrefixExpression
         {
-            $$ = yy.node.CallExpression(
-                yy.node.Identifier($2),
-                [$1, $3]
-            );
+            $$ = yy.node.BinaryExpression($2, $1, $3);
         }
     | MultiplicativeExpression '%' PrefixExpression
         {
-            $$ = yy.node.CallExpression(
-                yy.node.Identifier($2),
-                [$1, $3]
-            );
+            $$ = yy.node.BinaryExpression($2, $1, $3);
         }
     ;
 

@@ -5,19 +5,17 @@ describe ('Operator', function () {
 
     it ('should parse operator +', function () {
         var ast = parser.parse('1 + baz;');
-        assert.strictEqual(ast.body[0].expression.type, 'CallExpression');
-        assert.strictEqual(ast.body[0].expression.callee.type, 'Identifier');
-        assert.strictEqual(ast.body[0].expression.callee.name, '+');
-        assert.strictEqual(ast.body[0].expression.arguments.length, 2);
-        assert.strictEqual(ast.body[0].expression.arguments[0].type, 'Literal');
-        assert.strictEqual(ast.body[0].expression.arguments[0].value, '1');
-        assert.strictEqual(ast.body[0].expression.arguments[1].type, 'Identifier');
-        assert.strictEqual(ast.body[0].expression.arguments[1].name, 'baz');
+        assert.strictEqual(ast.body[0].expression.type, 'BinaryExpression');
+        assert.strictEqual(ast.body[0].expression.operator, '+');
+        assert.strictEqual(ast.body[0].expression.left.type, 'Literal');
+        assert.strictEqual(ast.body[0].expression.left.value, '1');
+        assert.strictEqual(ast.body[0].expression.right.type, 'Identifier');
+        assert.strictEqual(ast.body[0].expression.right.name, 'baz');
     });
 
     it ('should parse operator -', function () {
         var ast = parser.parse('1 - baz;');
-        assert.strictEqual(ast.body[0].expression.callee.name, '-');
+        assert.strictEqual(ast.body[0].expression.operator, '-');
     });
 
     it ('should parse unary operator -', function () {
@@ -27,17 +25,17 @@ describe ('Operator', function () {
 
     it ('should parse operator *', function () {
         var ast = parser.parse('1 * baz;');
-        assert.strictEqual(ast.body[0].expression.callee.name, '*');
+        assert.strictEqual(ast.body[0].expression.operator, '*');
     });
 
     it ('should parse operator /', function () {
         var ast = parser.parse('1 / baz;');
-        assert.strictEqual(ast.body[0].expression.callee.name, '/');
+        assert.strictEqual(ast.body[0].expression.operator, '/');
     });
 
     it ('should parse operator %', function () {
         var ast = parser.parse('1 % baz;');
-        assert.strictEqual(ast.body[0].expression.callee.name, '%');
+        assert.strictEqual(ast.body[0].expression.operator, '%');
     });
 
     it ('should parse operator =', function () {
@@ -47,18 +45,18 @@ describe ('Operator', function () {
 
     it ('should parse operator <', function () {
         var ast = parser.parse('1 < baz;');
-        assert.strictEqual(ast.body[0].expression.callee.name, '<');
+        assert.strictEqual(ast.body[0].expression.operator, '<');
     });
 
     it ('should parse operator >', function () {
         var ast = parser.parse('1 > baz;');
-        assert.strictEqual(ast.body[0].expression.callee.name, '>');
+        assert.strictEqual(ast.body[0].expression.operator, '>');
     });
 
     it ('should parse operator ? :', function () {
         var ast = parser.parse('1 + 3 ? 4 : 5;');
         assert.strictEqual(ast.body[0].expression.type, 'ConditionalExpression');
-        assert.strictEqual(ast.body[0].expression.test.type, 'CallExpression');
+        assert.strictEqual(ast.body[0].expression.test.type, 'BinaryExpression');
         assert.strictEqual(ast.body[0].expression.consequent.type, 'Literal');
         assert.strictEqual(ast.body[0].expression.alternate.type, 'Literal');
     });

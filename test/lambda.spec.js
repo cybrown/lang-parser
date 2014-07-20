@@ -7,7 +7,7 @@ describe ('Lambda', function () {
         var ast = parser.parse('() => (x + 1);');
         assert.strictEqual(ast.body[0].expression.type, 'LambdaExpression');
         assert.strictEqual(ast.body[0].expression.params.length, 0);
-        assert.strictEqual(ast.body[0].expression.body.type, 'CallExpression');
+        assert.strictEqual(ast.body[0].expression.body.type, 'BinaryExpression');
     });
 
     it ('should parse a lambda with 1 argument without ()', function () {
@@ -16,7 +16,7 @@ describe ('Lambda', function () {
         assert.strictEqual(ast.body[0].expression.params.length, 1);
         assert.strictEqual(ast.body[0].expression.params[0].type, 'Identifier');
         assert.strictEqual(ast.body[0].expression.params[0].name, 'x');
-        assert.strictEqual(ast.body[0].expression.body.type, 'CallExpression');
+        assert.strictEqual(ast.body[0].expression.body.type, 'BinaryExpression');
     });
 
     it ('should parse a lambda with 1 argument and ()', function () {
@@ -25,7 +25,7 @@ describe ('Lambda', function () {
         assert.strictEqual(ast.body[0].expression.params.length, 1);
         assert.strictEqual(ast.body[0].expression.params[0].type, 'Identifier');
         assert.strictEqual(ast.body[0].expression.params[0].name, 'x');
-        assert.strictEqual(ast.body[0].expression.body.type, 'CallExpression');
+        assert.strictEqual(ast.body[0].expression.body.type, 'BinaryExpression');
     });
 
     it ('should not parse a lambda with 1 argument non identifier and ()', function () {
@@ -43,7 +43,7 @@ describe ('Lambda', function () {
         assert.strictEqual(ast.body[0].expression.params[0].name, 'x');
         assert.strictEqual(ast.body[0].expression.params[1].type, 'Identifier');
         assert.strictEqual(ast.body[0].expression.params[1].name, 'y');
-        assert.strictEqual(ast.body[0].expression.body.type, 'CallExpression');
+        assert.strictEqual(ast.body[0].expression.body.type, 'BinaryExpression');
     });
 
     it ('should parse a lambda with 2 arguments', function () {
