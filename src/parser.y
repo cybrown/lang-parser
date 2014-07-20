@@ -87,9 +87,47 @@ StatementList
 ClassDeclaration
     : CLASS IDENTIFIER '{' '}'
         {$$ = yy.node.ClassDeclaration($2, []);}
+    | CLASS IDENTIFIER '{' ClassMemberList '}'
+        {$$ = yy.node.ClassDeclaration($2, $4);}
     ;
 
 /* END Declarations */
+
+/* Subdeclarations */
+
+ClassMemberList
+    : ClassMember
+        {$$ = [$1];}
+    | ClassMemberList ClassMember
+        {
+            $1.push($2);
+            $$ = $1;
+        }
+    ;
+
+ClassMember
+    : ClassAttribute
+        {$$ = $1;}
+    | ClassMethod
+        {$$ = $1;}
+    ;
+
+ClassAttribute
+    : Type IDENTIFIER ';'
+        {$$ = yy.node.ClassAttribute($2, $1);}
+    ;
+
+ClassMethod
+    : Type IDENTIFIER '(' ')' BlockStatement
+        {$$ = yy.node.ClassMethod($2, $1, [], $5);}
+    ;
+
+Type
+    : IDENTIFIER
+        {$$ = yy.node.Identifier($1);}
+    ;
+
+/* END Subdeclarations */
 
 /* Expressions */
 
@@ -124,7 +162,7 @@ LambdaExpression
         }
     | IDENTIFIER ARROW ConditionalExpression
         {$$ = yy.node.LambdaExpression([yy.node.Identifier($1)], $3);}
-    | '(' IdentifierList ')' ARROW ConditionalExpression
+    | '(' LambdaParameterList ')' ARROW ConditionalExpression
         {$$ = yy.node.LambdaExpression($2, $5);}
     ;
 
@@ -216,7 +254,7 @@ PostfixExpression
         {$$ = $1;}
     | PostfixExpression '(' ')'
         {$$ = yy.node.CallExpression($1, []);}
-    | PostfixExpression '(' ArgumentList ')'
+    | PostfixExpression '(' CallArgumentList ')'
         {$$ = yy.node.CallExpression($1, $3);}
     ;
 
@@ -259,7 +297,7 @@ ExpressionList
 
 /* Subelements for Expressions */
 
-IdentifierList
+LambdaParameterList
     : IDENTIFIER ',' IDENTIFIER
         {
             $$ = [
@@ -267,17 +305,17 @@ IdentifierList
                 yy.node.Identifier($3)
             ];
         }
-    | IdentifierList ',' IDENTIFIER
+    | LambdaParameterList ',' IDENTIFIER
         {
             $1.push(yy.node.Identifier($3));
             $$ = $1;
         }
     ;
 
-ArgumentList
+CallArgumentList
     : Expression
         {$$ = [$1];}
-    | ArgumentList ',' Expression
+    | CallArgumentList ',' Expression
         {
             $1.push($3);
             $$ = $1;
