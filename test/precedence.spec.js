@@ -41,6 +41,14 @@ describe ('Precedence', function () {
         assert.strictEqual(ast.body[0].expression.right.operator, '^');
     });
 
+    it ('&& over ||', function () {
+        var ast = parser.parse('a || b && c;');
+        assert.strictEqual(ast.body[0].expression.type, 'BinaryExpression');
+        assert.strictEqual(ast.body[0].expression.right.type, 'BinaryExpression');
+        assert.strictEqual(ast.body[0].expression.operator, '||');
+        assert.strictEqual(ast.body[0].expression.right.operator, '&&');
+    });
+
     it ('UMINUS over -', function () {
         var ast = parser.parse('-1 * -2;');
         assert.strictEqual(ast.body[0].expression.type, 'BinaryExpression');

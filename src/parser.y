@@ -5,6 +5,16 @@
 "class"               return 'CLASS'
 [0-9]+("."[0-9]+)?\b  return 'LITERAL_NUMBER'
 [a-zA-Z_]+[0-9a-zA-Z_]* return 'IDENTIFIER'
+'+='                  return 'ADD_ASSIGN'
+'-='                  return 'SUB_ASSIGN'
+'*='                  return 'MUL_ASSIGN'
+'/='                  return 'DIV_ASSIGN'
+'%='                  return 'REM_ASSIGN'
+'<<='                 return 'SHL_ASSIGN'
+'>>='                 return 'SHR_ASSIGN'
+'&='                  return 'AND_ASSIGN'
+'^='                  return 'XOR_ASSIGN'
+'|='                  return 'OR_ASSIGN'
 "=>"                  return 'ARROW'
 "=="                  return 'EQ'
 "!="                  return 'NE'
@@ -12,6 +22,8 @@
 ">="                  return 'GE'
 "<<"                  return 'SHL'
 ">>"                  return 'SHR'
+"&&"                  return 'AND'
+"||"                  return 'OR'
 "*"                   return '*'
 "%"                   return '%'
 "/"                   return '/'
@@ -167,6 +179,26 @@ AssignmentExpression
         {$$ = $1;}
     | AssignmentExpression '=' LambdaExpression
         {$$ = yy.node.AssignmentExpression($2, $1, $3);}
+    | AssignmentExpression ADD_ASSIGN LambdaExpression
+        {$$ = yy.node.AssignmentExpression($2, $1, $3);}
+    | AssignmentExpression SUB_ASSIGN LambdaExpression
+        {$$ = yy.node.AssignmentExpression($2, $1, $3);}
+    | AssignmentExpression MUL_ASSIGN LambdaExpression
+        {$$ = yy.node.AssignmentExpression($2, $1, $3);}
+    | AssignmentExpression DIV_ASSIGN LambdaExpression
+        {$$ = yy.node.AssignmentExpression($2, $1, $3);}
+    | AssignmentExpression REM_ASSIGN LambdaExpression
+        {$$ = yy.node.AssignmentExpression($2, $1, $3);}
+    | AssignmentExpression SHL_ASSIGN LambdaExpression
+        {$$ = yy.node.AssignmentExpression($2, $1, $3);}
+    | AssignmentExpression SHR_ASSIGN LambdaExpression
+        {$$ = yy.node.AssignmentExpression($2, $1, $3);}
+    | AssignmentExpression AND_ASSIGN LambdaExpression
+        {$$ = yy.node.AssignmentExpression($2, $1, $3);}
+    | AssignmentExpression XOR_ASSIGN LambdaExpression
+        {$$ = yy.node.AssignmentExpression($2, $1, $3);}
+    | AssignmentExpression OR_ASSIGN LambdaExpression
+        {$$ = yy.node.AssignmentExpression($2, $1, $3);}
     ;
 
 LambdaExpression
@@ -190,12 +222,24 @@ LambdaExpression
     ;
 
 ConditionalExpression
-    : BitwiseOrExpression
+    : LogicalOrExpression
         {$$ = $1;}
-    | BitwiseOrExpression '?' Expression ':' ConditionalExpression
+    | LogicalOrExpression '?' Expression ':' ConditionalExpression
         {$$ = yy.node.ConditionalExpression($1, $3, $5);}
     ;
 
+LogicalOrExpression
+    : LogicalAndExpression
+        {$$ = $1;}
+    | LogicalOrExpression OR LogicalAndExpression
+        {$$ = yy.node.BinaryExpression($2, $1, $3);}
+    ;
+LogicalAndExpression
+    : BitwiseOrExpression
+        {$$ = $1;}
+    | LogicalAndExpression AND BitwiseOrExpression
+        {$$ = yy.node.BinaryExpression($2, $1, $3);}
+    ;
 BitwiseOrExpression
     : BitwiseXorExpression
         {$$ = $1;}

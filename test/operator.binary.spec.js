@@ -32,6 +32,16 @@ describe ('Operator', function () {
 
     // Logical
 
+    it ('should parse operator &&', function () {
+        var ast = parser.parse('1 && baz;');
+        assert.strictEqual(ast.body[0].expression.operator, '&&');
+    });
+
+    it ('should parse operator ||', function () {
+        var ast = parser.parse('1 || baz;');
+        assert.strictEqual(ast.body[0].expression.operator, '||');
+    });
+
     // Bitwise
 
     it ('should parse operator &', function () {
