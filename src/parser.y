@@ -2,6 +2,7 @@
 %%
 
 \s+                   /* skip whitespace */
+"class"               return 'CLASS'
 [0-9]+("."[0-9]+)?\b  return 'LITERAL_NUMBER'
 [a-zA-Z_]+[0-9a-zA-Z_]* return 'IDENTIFIER'
 "=>"                  return 'ARROW'
@@ -39,10 +40,19 @@ Program
         {return yy.node.Program($1);}
     ;
 
+/* Statements */
+
 Statement
     : ExpressionStatement
         {$$ = $1;}
     | BlockStatement
+        {$$ = $1;}
+    | DeclarationStatement
+        {$$ = $1;}
+    ;
+
+DeclarationStatement
+    : ClassDeclaration
         {$$ = $1;}
     ;
 
@@ -69,6 +79,19 @@ StatementList
             $$ = $1;
         }
     ;
+
+/* END Statements */
+
+/* Declarations */
+
+ClassDeclaration
+    : CLASS IDENTIFIER '{' '}'
+        {$$ = yy.node.ClassDeclaration($2, []);}
+    ;
+
+/* END Declarations */
+
+/* Expressions */
 
 Expression
     : AffectionExpression
@@ -204,7 +227,12 @@ PrimaryExpression
         {$$ = yy.node.Identifier(yytext);}
     | ParanthesisExpression
         {$$ = $1;}
-    | '[' ']'
+    | ArrayExpression
+        {$$ = $1;}
+    ;
+
+ArrayExpression
+    : '[' ']'
         {$$ = yy.node.BracketExpression([]);}
     | '[' Expression ']'
         {$$ = yy.node.BracketExpression($2);}
@@ -227,15 +255,9 @@ ExpressionList
         }
     ;
 
-ArgumentList
-    : Expression
-        {$$ = [$1];}
-    | ArgumentList ',' Expression
-        {
-            $1.push($3);
-            $$ = $1;
-        }
-    ;
+/* END Expressions */
+
+/* Subelements for Expressions */
 
 IdentifierList
     : IDENTIFIER ',' IDENTIFIER
@@ -251,3 +273,15 @@ IdentifierList
             $$ = $1;
         }
     ;
+
+ArgumentList
+    : Expression
+        {$$ = [$1];}
+    | ArgumentList ',' Expression
+        {
+            $1.push($3);
+            $$ = $1;
+        }
+    ;
+
+/* END for Expressions */
