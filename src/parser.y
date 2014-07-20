@@ -21,6 +21,8 @@
 ","                   return ','
 "="                   return '='
 ";"                   return ';'
+"?"                   return '?'
+":"                   return ':'
 <<EOF>>               return 'EOF'
 .                     return 'INVALID'
 
@@ -81,21 +83,28 @@ AffectionExpression
     ;
 
 LambdaExpression
-    : ComparisonExpression
+    : ConditionalExpression
         {$$ = $1;}
-    | '(' ')' ARROW ComparisonExpression
+    | '(' ')' ARROW ConditionalExpression
         {$$ = yy.node.LambdaExpression([], $4);}
-    | ParanthesisExpression ARROW ComparisonExpression
+    | ParanthesisExpression ARROW ConditionalExpression
         {
             if (!$1.type || $1.type !== 'Identifier') {
                 throw new Error('Lambda arguments can only be identifiers');
             }
             $$ = yy.node.LambdaExpression([$1], $3);
         }
-    | IDENTIFIER ARROW ComparisonExpression
+    | IDENTIFIER ARROW ConditionalExpression
         {$$ = yy.node.LambdaExpression([yy.node.Identifier($1)], $3);}
-    | '(' IdentifierList ')' ARROW ComparisonExpression
+    | '(' IdentifierList ')' ARROW ConditionalExpression
         {$$ = yy.node.LambdaExpression($2, $5);}
+    ;
+
+ConditionalExpression
+    : ComparisonExpression
+        {$$ = $1;}
+    | ComparisonExpression '?' Expression ':' ConditionalExpression
+        {$$ = yy.node.ConditionalExpression($1, $3, $5);}
     ;
 
 ComparisonExpression
