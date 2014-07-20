@@ -20,7 +20,7 @@ describe ('Operator', function () {
 
     it ('should parse unary operator -', function () {
         var ast = parser.parse('- baz;');
-        assert.strictEqual(ast.body[0].expression.callee.name, '-');
+        assert.strictEqual(ast.body[0].expression.operator, '-');
     });
 
     it ('should parse operator *', function () {

@@ -21,9 +21,9 @@ describe ('Precedence', function () {
         var ast = parser.parse('-1 * -2;');
         assert.strictEqual(ast.body[0].expression.type, 'BinaryExpression');
         assert.strictEqual(ast.body[0].expression.operator, '*');
-        assert.strictEqual(ast.body[0].expression.left.type, 'CallExpression');
-        assert.strictEqual(ast.body[0].expression.left.callee.name, '-');
-        assert.strictEqual(ast.body[0].expression.right.type, 'CallExpression');
-        assert.strictEqual(ast.body[0].expression.right.callee.name, '-');
+        assert.strictEqual(ast.body[0].expression.left.type, 'UnaryExpression');
+        assert.strictEqual(ast.body[0].expression.left.operator, '-');
+        assert.strictEqual(ast.body[0].expression.right.type, 'UnaryExpression');
+        assert.strictEqual(ast.body[0].expression.right.operator, '-');
     });
 });

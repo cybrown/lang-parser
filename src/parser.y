@@ -179,55 +179,36 @@ ComparisonExpression
     : AdditiveExpression
         {$$ = $1;}
     | ComparisonExpression '<' AdditiveExpression
-        {
-            $$ = yy.node.BinaryExpression($2, $1, $3);
-        }
+        {$$ = yy.node.BinaryExpression($2, $1, $3);}
     | ComparisonExpression '>' AdditiveExpression
-        {
-            $$ = yy.node.BinaryExpression($2, $1, $3);
-        }
+        {$$ = yy.node.BinaryExpression($2, $1, $3);}
     ;
 
 AdditiveExpression
     : MultiplicativeExpression
         {$$ = $1;}
     | AdditiveExpression '+' MultiplicativeExpression
-        {
-            $$ = yy.node.BinaryExpression($2, $1, $3);
-        }
+        {$$ = yy.node.BinaryExpression($2, $1, $3);}
     | AdditiveExpression '-' MultiplicativeExpression
-        {
-            $$ = yy.node.BinaryExpression($2, $1, $3);
-        }
+        {$$ = yy.node.BinaryExpression($2, $1, $3);}
     ;
 
 MultiplicativeExpression
     : PrefixExpression
         {$$ = $1;}
     | MultiplicativeExpression '*' PrefixExpression
-        {
-            $$ = yy.node.BinaryExpression($2, $1, $3);
-        }
+        {$$ = yy.node.BinaryExpression($2, $1, $3);}
     | MultiplicativeExpression '/' PrefixExpression
-        {
-            $$ = yy.node.BinaryExpression($2, $1, $3);
-        }
+        {$$ = yy.node.BinaryExpression($2, $1, $3);}
     | MultiplicativeExpression '%' PrefixExpression
-        {
-            $$ = yy.node.BinaryExpression($2, $1, $3);
-        }
+        {$$ = yy.node.BinaryExpression($2, $1, $3);}
     ;
 
 PrefixExpression
     : PostfixExpression
         {$$ = $1;}
     | '-' PrefixExpression
-        {
-            $$ = yy.node.CallExpression(
-                yy.node.Identifier($1),
-                [$1]
-            );
-        }
+        {$$ = yy.node.UnaryExpression($1, [$1]);}
     ;
 
 PostfixExpression
