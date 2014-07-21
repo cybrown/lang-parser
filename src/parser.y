@@ -163,15 +163,19 @@ ClassMember
     ;
 
 ClassAttribute
-    : Type IDENTIFIER ';'
-        {$$ = yy.node.ClassAttribute($2, $1);}
+    : IDENTIFIER ':' Type ';'
+        {$$ = yy.node.ClassAttribute($1, $3);}
     ;
 
 ClassMethod
-    : Type IDENTIFIER '(' ')' BlockStatement
-        {$$ = yy.node.ClassMethod($2, $1, [], $5);}
-    | Type IDENTIFIER '(' MethodParameterList ')' BlockStatement
-        {$$ = yy.node.ClassMethod($2, $1, $4, $6);}
+    : IDENTIFIER '(' ')' BlockStatement
+        {$$ = yy.node.ClassMethod($1, null, [], $4);}
+    | IDENTIFIER '(' MethodParameterList ')' BlockStatement
+        {$$ = yy.node.ClassMethod($1, null, $3, $5);}
+    | IDENTIFIER '(' ')' ':' Type BlockStatement
+        {$$ = yy.node.ClassMethod($1, $5, [], $6);}
+    | IDENTIFIER '(' MethodParameterList ')' ':' Type BlockStatement
+        {$$ = yy.node.ClassMethod($1, $6, $3, $7);}
     ;
 
 MethodParameterList

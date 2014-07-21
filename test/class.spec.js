@@ -11,7 +11,7 @@ describe ('Class', function () {
     });
 
     it ('should parse a class with one attribute', function () {
-        var ast = parser.parse('class Foo { int age; }');
+        var ast = parser.parse('class Foo { age: int; }');
         assert.strictEqual(ast.body[0].type, 'ClassDeclaration');
         assert.strictEqual(ast.body[0].name, 'Foo');
         assert.strictEqual(ast.body[0].members.length, 1);
@@ -21,23 +21,23 @@ describe ('Class', function () {
     });
 
     it ('should parse a class with one method', function () {
-        var ast = parser.parse('class Foo { int getAge() {1+1;} }');
+        var ast = parser.parse('class Foo { getAge() {1+1;} }');
         assert.strictEqual(ast.body[0].type, 'ClassDeclaration');
         assert.strictEqual(ast.body[0].name, 'Foo');
         assert.strictEqual(ast.body[0].members.length, 1);
         assert.strictEqual(ast.body[0].members[0].type, 'ClassMethod');
-        assert.strictEqual(ast.body[0].members[0].returnKind.name, 'int');
+        assert.strictEqual(ast.body[0].members[0].returnKind, null);
         assert.strictEqual(ast.body[0].members[0].name, 'getAge');
         assert.strictEqual(ast.body[0].members[0].parameters.length, 0);
     });
 
     it ('should parse a class with two methods', function () {
-        var ast = parser.parse('class Foo { int getAge() {1+1;} string getName() {4;} }');
+        var ast = parser.parse('class Foo { getAge() {1+1;} getName(): string {4;} }');
         assert.strictEqual(ast.body[0].type, 'ClassDeclaration');
         assert.strictEqual(ast.body[0].name, 'Foo');
         assert.strictEqual(ast.body[0].members.length, 2);
         assert.strictEqual(ast.body[0].members[0].type, 'ClassMethod');
-        assert.strictEqual(ast.body[0].members[0].returnKind.name, 'int');
+        assert.strictEqual(ast.body[0].members[0].returnKind, null);
         assert.strictEqual(ast.body[0].members[0].name, 'getAge');
         assert.strictEqual(ast.body[0].members[0].parameters.length, 0);
         assert.strictEqual(ast.body[0].members[1].type, 'ClassMethod');
