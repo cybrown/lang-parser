@@ -5,6 +5,7 @@
 "class"               return 'CLASS'
 "var"                 return 'VAR'
 "let"                 return 'LET'
+"return"              return 'RETURN'
 [0-9]+("."[0-9]+)?\b  return 'LITERAL_NUMBER'
 [a-zA-Z_]+[0-9a-zA-Z_]* return 'IDENTIFIER'
 '+='                  return 'ADD_ASSIGN'
@@ -77,6 +78,8 @@ Statement
         {$$ = $1;}
     | DeclarationStatement
         {$$ = $1;}
+    | ReturnStatement
+        {$$ = $1;}
     ;
 
 DeclarationStatement
@@ -110,6 +113,13 @@ StatementList
             $1.push($2);
             $$ = $1;
         }
+    ;
+
+ReturnStatement
+    : RETURN ';'
+        {$$ = yy.node.ReturnStatement(null);}
+    | RETURN Expression ';'
+        {$$ = yy.node.ReturnStatement($2);}
     ;
 
 /* END Statements */
