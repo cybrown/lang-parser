@@ -3,6 +3,8 @@
 
 \s+                   /* skip whitespace */
 "class"               return 'CLASS'
+"var"                 return 'VAR'
+"let"                 return 'LET'
 [0-9]+("."[0-9]+)?\b  return 'LITERAL_NUMBER'
 [a-zA-Z_]+[0-9a-zA-Z_]* return 'IDENTIFIER'
 '+='                  return 'ADD_ASSIGN'
@@ -80,6 +82,10 @@ Statement
 DeclarationStatement
     : ClassDeclaration
         {$$ = $1;}
+    | VariableDeclaration
+        {$$ = $1;}
+    | ConstantDeclaration
+        {$$ = $1;}
     ;
 
 ExpressionStatement
@@ -109,6 +115,24 @@ StatementList
 /* END Statements */
 
 /* Declarations */
+
+VariableDeclaration
+    : VAR IDENTIFIER ':' Type ';'
+        {$$ = yy.node.VariableDeclaration($2, $4);}
+    | VAR IDENTIFIER ':' Type '=' Expression ';'
+        {$$ = yy.node.VariableDeclaration($2, $4, $6);}
+    | VAR IDENTIFIER '=' Expression ';'
+        {$$ = yy.node.VariableDeclaration($2, null, $4);}
+    ;
+
+ConstantDeclaration
+    : LET IDENTIFIER ':' Type ';'
+        {$$ = yy.node.ConstantDeclaration($2, $4);}
+    | LET IDENTIFIER ':' Type '=' Expression ';'
+        {$$ = yy.node.ConstantDeclaration($2, $4, $6);}
+    | LET IDENTIFIER '=' Expression ';'
+        {$$ = yy.node.ConstantDeclaration($2, null, $4);}
+    ;
 
 ClassDeclaration
     : CLASS IDENTIFIER '{' '}'
