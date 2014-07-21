@@ -189,8 +189,8 @@ MethodParameterList
     ;
 
 MethodParameter
-    : Type IDENTIFIER
-        {$$ = yy.node.MethodParameter($2, $1);}
+    : IDENTIFIER ':' Type
+        {$$ = yy.node.MethodParameter($1, $3);}
     ;
 
 Type

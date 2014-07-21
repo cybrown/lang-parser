@@ -28,7 +28,7 @@ describe ('Class Method', function () {
     });
 
     it ('should parse a method with one parameter', function () {
-        var ast = parser.parse('class Foo { getAge(int a) {1;} }');
+        var ast = parser.parse('class Foo { getAge(a: int) {1;} }');
         assert.strictEqual(ast.body[0].type, 'ClassDeclaration');
         assert.strictEqual(ast.body[0].name, 'Foo');
         assert.strictEqual(ast.body[0].members.length, 1);
@@ -42,7 +42,7 @@ describe ('Class Method', function () {
     });
 
     it ('should parse a method with one parameter and type', function () {
-        var ast = parser.parse('class Foo { getAge(int a): int {1;} }');
+        var ast = parser.parse('class Foo { getAge(a: int): int {1;} }');
         assert.strictEqual(ast.body[0].type, 'ClassDeclaration');
         assert.strictEqual(ast.body[0].name, 'Foo');
         assert.strictEqual(ast.body[0].members.length, 1);
