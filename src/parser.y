@@ -5,6 +5,10 @@
 "class"               return 'CLASS'
 "var"                 return 'VAR'
 "let"                 return 'LET'
+"try"                 return 'TRY'
+"catch"               return 'CATCH'
+"finally"             return 'FINALLY'
+"throw"               return 'THROW'
 "return"              return 'RETURN'
 [0-9]+("."[0-9]+)?\b  return 'LITERAL_NUMBER'
 [a-zA-Z_]+[0-9a-zA-Z_]* return 'IDENTIFIER'
@@ -80,6 +84,10 @@ Statement
         {$$ = $1;}
     | ReturnStatement
         {$$ = $1;}
+    | ThrowStatement
+        {$$ = $1;}
+    | TryStatement
+        {$$ = $1;}
     ;
 
 DeclarationStatement
@@ -91,9 +99,36 @@ DeclarationStatement
         {$$ = $1;}
     ;
 
+TryStatement
+    : TRY BlockStatement CatchClauseList
+        {$$ = yy.node.TryStatement($2, $3, null);}
+    | TRY BlockStatement CatchClauseList FINALLY BlockStatement
+        {$$ = yy.node.TryStatement($2, $3, $5);}
+    ;
+
+CatchClauseList
+    : CatchClause
+        {$$ = [$1];}
+    | CatchClauseList CatchClause
+        {
+            $1.push($2);
+            $$ = $1;
+        }
+    ;
+
+CatchClause
+    : CATCH '(' IDENTIFIER ':' Type ')' BlockStatement
+        {$$ = yy.node.CatchClause($3, $5, $7);}
+    ;
+
 ExpressionStatement
     : Expression ';'
         {$$ = yy.node.ExpressionStatement($1);}
+    ;
+
+ThrowStatement
+    : THROW Expression ';'
+        {$$ = yy.node.ThrowStatement($2);}
     ;
 
 BlockStatement
