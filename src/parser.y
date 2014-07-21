@@ -3,6 +3,7 @@
 
 \s+                   /* skip whitespace */
 "class"               return 'CLASS'
+"interface"           return 'INTERFACE'
 "var"                 return 'VAR'
 "let"                 return 'LET'
 "try"                 return 'TRY'
@@ -92,6 +93,8 @@ Statement
 
 DeclarationStatement
     : ClassDeclaration
+        {$$ = $1;}
+    | InterfaceDeclaration
         {$$ = $1;}
     | VariableDeclaration
         {$$ = $1;}
@@ -184,6 +187,14 @@ ClassDeclaration
         {$$ = yy.node.ClassDeclaration($2, []);}
     | CLASS IDENTIFIER '{' ClassMemberList '}'
         {$$ = yy.node.ClassDeclaration($2, $4);}
+    ;
+
+
+InterfaceDeclaration
+    : INTERFACE IDENTIFIER '{' '}'
+        {$$ = yy.node.InterfaceDeclaration($2, []);}
+    | INTERFACE IDENTIFIER '{' ClassMemberList '}'
+        {$$ = yy.node.InterfaceDeclaration($2, $4);}
     ;
 
 /* END Declarations */
