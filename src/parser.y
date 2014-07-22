@@ -2,17 +2,23 @@
 %%
 
 \s+                   /* skip whitespace */
-"class"               return 'CLASS'
-"interface"           return 'INTERFACE'
-"var"                 return 'VAR'
-"let"                 return 'LET'
-"try"                 return 'TRY'
+
+/* Keywords */
 "catch"               return 'CATCH'
+"class"               return 'CLASS'
 "finally"             return 'FINALLY'
-"throw"               return 'THROW'
+"interface"           return 'INTERFACE'
+"let"                 return 'LET'
 "return"              return 'RETURN'
+"throw"               return 'THROW'
+"try"                 return 'TRY'
+"var"                 return 'VAR'
+
+/* Values */
 [0-9]+("."[0-9]+)?\b  return 'LITERAL_NUMBER'
 [a-zA-Z_]+[0-9a-zA-Z_]* return 'IDENTIFIER'
+
+/* Operators */
 '+='                  return 'ADD_ASSIGN'
 '-='                  return 'SUB_ASSIGN'
 '*='                  return 'MUL_ASSIGN'
@@ -58,6 +64,8 @@
 "|"                   return '|'
 "^"                   return '^'
 "."                   return '.'
+
+/* Special */
 <<EOF>>               return 'EOF'
 .                     return 'INVALID'
 
