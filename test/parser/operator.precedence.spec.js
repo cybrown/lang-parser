@@ -15,7 +15,7 @@ describe ('Precedence', function () {
         var ast = parser.parse('a[b].c;');
         assert.strictEqual(ast.body[0].expression.type, 'MemberExpression');
         assert.strictEqual(ast.body[0].expression.object.object.name, 'a');
-        assert.strictEqual(ast.body[0].expression.object.property.name, 'b');
+        assert.strictEqual(ast.body[0].expression.object.index.name, 'b');
         assert.strictEqual(ast.body[0].expression.property.name, 'c');
     });
 

@@ -12,9 +12,10 @@ describe ('Operator', function () {
     });
 
     it ('should parse operator []', function () {
-        var ast = parser.parse('1 [baz];');
-        assert.strictEqual(ast.body[0].expression.type, 'MemberExpression');
-        assert.strictEqual(ast.body[0].expression.property.type, 'Identifier');
+        var ast = parser.parse('baz [1];');
+        assert.strictEqual(ast.body[0].expression.type, 'SubscriptExpression');
+        assert.strictEqual(ast.body[0].expression.index.type, 'Literal');
+        assert.strictEqual(ast.body[0].expression.object.type, 'Identifier');
     });
 
     // Arithmetic

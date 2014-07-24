@@ -384,4 +384,48 @@ describe ('Walker Expressions', function () {
         });
         walker.walk(node);
     });
+
+    it ('should walk SubscriptExpression', function (done) {
+        var counter = 0;
+        var node = nodes.SubscriptExpression(
+            nodes.Identifier('bar'),
+            nodes.Literal(314)
+        );
+        walker.on('node.SubscriptExpression.enter', function (node) {
+            try {
+                assert.equal(counter, 0);
+                counter++;
+            } catch (err) {
+                done(err);
+            }
+        });
+        walker.on('node.Identifier', function (node) {
+            try {
+                assert.equal(counter, 1);
+                assert.equal(node.name, 'bar');
+                counter++;
+            } catch (err) {
+                done(err);
+            }
+        });
+        walker.on('node.Literal', function (node) {
+            try {
+                assert.equal(counter, 2);
+                assert.equal(node.value, 314);
+                counter++;
+            } catch (err) {
+                done(err);
+            }
+        });
+        walker.on('node.SubscriptExpression.leave', function (node) {
+            try {
+                assert.equal(counter, 3);
+                counter++;
+                done();
+            } catch (err) {
+                done(err);
+            }
+        });
+        walker.walk(node);
+    });
 });
