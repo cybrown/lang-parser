@@ -1,5 +1,5 @@
 var assert = require('assert');
-var parser = require('../lib/parserw');
+var parser = require('../../lib/parserw');
 
 describe ('Call', function () {
 

@@ -17,10 +17,17 @@ gulp.task('jison', function() {
         .pipe(gulp.dest('./lib/'));
 });
 
-gulp.task('mocha', function () {
-    return gulp.src('test/*', {read: false})
+gulp.task('mocha.parser', function () {
+    return gulp.src('test/parser/*', {read: false})
         .pipe(mocha());
 });
+
+gulp.task('mocha.walker', function () {
+    return gulp.src('test/walker/*', {read: false})
+        .pipe(mocha());
+});
+
+gulp.task('mocha', ['mocha.parser', 'mocha.walker']);
 
 gulp.task('test', function () {
     return runSequence('mocha');
