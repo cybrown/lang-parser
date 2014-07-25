@@ -35,9 +35,9 @@ walker.on('node.UnaryExpression.leave', function (node) {
 });
 
 walker.on('node.BinaryExpression.leave', function (node) {
-    var a = stack[stack.length - 1];
-    stack.pop();
     var b = stack[stack.length - 1];
+    stack.pop();
+    var a = stack[stack.length - 1];
     stack.pop();
     var r = 0;
     switch (node.operator) {
