@@ -173,7 +173,83 @@ describe ('Walker Expressions', function () {
     });
 
     it ('should walk TryStatement', function (done) {
-        
+        var counter = 0;
+        var node = nodes.TryStatement(
+            nodes.ThrowStatement(
+                nodes.Literal(42)
+            ),
+            [nodes.CatchClause('a', null,
+                nodes.ExpressionStatement(
+                    nodes.Literal(42)
+                )
+            )],
+            nodes.ExpressionStatement(
+                nodes.Literal(42)
+            )
+        );
+        walker.on('node.TryStatement.enter', function () {
+            try {
+                assert.equal(counter, 0);
+                counter++;
+            } catch (err) {
+                done(err);
+            }
+        });
+        walker.on('node.ThrowStatement.enter', function () {
+            try {
+                assert.equal(counter, 1);
+                counter++;
+            } catch (err) {
+                done(err);
+            }
+        });
+        walker.on('node.ThrowStatement.leave', function () {
+            try {
+                assert.equal(counter, 2);
+                counter++;
+            } catch (err) {
+                done(err);
+            }
+        });
+        walker.on('node.CatchClause.enter', function () {
+            try {
+                assert.equal(counter, 3);
+                counter++;
+            } catch (err) {
+                done(err);
+            }
+        });
+        walker.on('node.CatchClause.leave', function () {
+            try {
+                assert.equal(counter, 6);
+                counter++;
+            } catch (err) {
+                done(err);
+            }
+        });
+        walker.on('node.ExpressionStatement.enter', function () {
+            try {
+                counter++;
+            } catch (err) {
+                done(err);
+            }
+        });
+        walker.on('node.ExpressionStatement.leave', function () {
+            try {
+                counter++;
+            } catch (err) {
+                done(err);
+            }
+        });
+        walker.on('node.TryStatement.leave', function () {
+            try {
+                assert.equal(counter, 9);
+                done();
+            } catch (err) {
+                done(err);
+            }
+        });
+        walker.walk(node);
     });
 
     it ('should walk CatchClause', function (done) {
