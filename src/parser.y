@@ -412,26 +412,26 @@ PrefixExpression
     : PostfixExpression
         {$$ = $1;}
     | '-' PrefixExpression
-        {$$ = yy.node.UnaryExpression($1, $2);}
+        {$$ = yy.node.UnaryExpression($1, $2, true);}
     | '+' PrefixExpression
-        {$$ = yy.node.UnaryExpression($1, $2);}
+        {$$ = yy.node.UnaryExpression($1, $2, true);}
     | '!' PrefixExpression
-        {$$ = yy.node.UnaryExpression($1, $2);}
+        {$$ = yy.node.UnaryExpression($1, $2, true);}
     | '~' PrefixExpression
-        {$$ = yy.node.UnaryExpression($1, $2);}
+        {$$ = yy.node.UnaryExpression($1, $2, true);}
     | INC PrefixExpression
-        {$$ = yy.node.UnaryExpression($1, $2);}
+        {$$ = yy.node.UnaryExpression($1, $2, true);}
     | DEC PrefixExpression
-        {$$ = yy.node.UnaryExpression($1, $2);}
+        {$$ = yy.node.UnaryExpression($1, $2, true);}
     ;
 
 PostfixExpression
     : MemberExpression
         {$$ = $1;}
     | PostfixExpression INC
-        {$$ = yy.node.UnaryExpression($2, $1);}
+        {$$ = yy.node.UnaryExpression($2, $1, false);}
     | PostfixExpression DEC
-        {$$ = yy.node.UnaryExpression($2, $1);}
+        {$$ = yy.node.UnaryExpression($2, $1, false);}
     | PostfixExpression '(' ')'
         {$$ = yy.node.CallExpression($1, []);}
     | PostfixExpression '(' CallArgumentList ')'
