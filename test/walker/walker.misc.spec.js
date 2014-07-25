@@ -58,4 +58,16 @@ describe ('Walker Misc', function () {
         });
         walker.walk(node);
     });
+
+    it ('should not die when a null value is walked', function (done) {
+        var node = nodes.VariableDeclaration(
+            'a',
+            null,
+            null
+        );
+        walker.on('node.VariableDeclaration.leave', function () {
+            done();
+        });
+        walker.walk(node);
+    })
 });
