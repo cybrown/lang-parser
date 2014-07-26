@@ -15,7 +15,9 @@
 "var"                 return 'VAR'
 
 /* Values */
-[0-9]+("."[0-9]+)?\b  return 'LITERAL_NUMBER'
+[0-9]+"."[0-9]*       return 'LITERAL_DOUBLE'
+[0-9]+\b              return 'LITERAL_SIGNED_INTEGER'
+"."[0-9]+?\b          return 'LITERAL_DOUBLE'
 [a-zA-Z_]+[0-9a-zA-Z_]* return 'IDENTIFIER'
 
 /* Operators */
@@ -448,8 +450,10 @@ MemberExpression
     ;
 
 PrimaryExpression
-    : LITERAL_NUMBER
-        {$$ = yy.node.Literal(yytext);}
+    : LITERAL_SIGNED_INTEGER
+        {$$ = yy.node.Literal(yytext, yy.kinds.SIGNED_INTEGER);}
+    | LITERAL_DOUBLE
+        {$$ = yy.node.Literal(yytext, yy.kinds.DOUBLE);}
     | IDENTIFIER
         {$$ = yy.node.Identifier(yytext);}
     | ParanthesisExpression
