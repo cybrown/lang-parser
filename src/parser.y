@@ -307,7 +307,7 @@ LambdaExpression
         {$$ = yy.node.LambdaExpression([], $4);}
     | ParanthesisExpression ARROW ConditionalExpression
         {
-            if (!$1.type || $1.type !== 'Identifier') {
+            if (!$1.$type || $1.$type !== 'Identifier') {
                 throw new Error('Lambda arguments can only be identifiers');
             }
             $$ = yy.node.LambdaExpression([$1], $3);
@@ -451,9 +451,9 @@ MemberExpression
 
 PrimaryExpression
     : LITERAL_SIGNED_INTEGER
-        {$$ = yy.node.Literal(yytext, yy.kinds.SIGNED_INTEGER);}
+        {$$ = yy.node.Literal(yytext, yy.types.SIGNED_INTEGER);}
     | LITERAL_DOUBLE
-        {$$ = yy.node.Literal(yytext, yy.kinds.DOUBLE);}
+        {$$ = yy.node.Literal(yytext, yy.types.DOUBLE);}
     | IDENTIFIER
         {$$ = yy.node.Identifier(yytext);}
     | ParanthesisExpression
