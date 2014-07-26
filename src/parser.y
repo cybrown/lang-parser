@@ -451,9 +451,19 @@ MemberExpression
 
 PrimaryExpression
     : LITERAL_SIGNED_INTEGER
-        {$$ = yy.node.Literal(yytext, yy.types.SIGNED_INTEGER);}
+        {
+            $$ = yy.node.Literal(
+                yytext,
+                yy.types.PrimitiveType(32, false, false)
+            );
+        }
     | LITERAL_DOUBLE
-        {$$ = yy.node.Literal(yytext, yy.types.DOUBLE);}
+        {
+            $$ = yy.node.Literal(
+                yytext,
+                yy.types.PrimitiveType(64, true, false)
+            );
+        }
     | IDENTIFIER
         {$$ = yy.node.Identifier(yytext);}
     | ParanthesisExpression
