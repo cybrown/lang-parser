@@ -21,7 +21,7 @@ describe ('Walker Expressions', function () {
                 done(err);
             }
         });
-        walker.on('node.Literal', function (node) {
+        walker.on('node.Literal.enter', function (node) {
             try {
                 assert.equal(counter, 1);
                 counter++;
@@ -56,7 +56,7 @@ describe ('Walker Expressions', function () {
                 done(err);
             }
         });
-        walker.on('node.Literal', function (node) {
+        walker.on('node.Literal.enter', function (node) {
             try {
                 if (counter == 1) {
                     assert.equal(node.value, 1);
@@ -100,7 +100,7 @@ describe ('Walker Expressions', function () {
                 done(err);
             }
         });
-        walker.on('node.Identifier', function (node) {
+        walker.on('node.Identifier.enter', function (node) {
             try {
                 assert.equal(node.name, 'variable');
                 assert.equal(counter, 1);
@@ -109,7 +109,7 @@ describe ('Walker Expressions', function () {
                 done(err);
             }
         });
-        walker.on('node.Literal', function (node) {
+        walker.on('node.Literal.enter', function (node) {
             try {
                 assert.equal(node.value, 2);
                 assert.equal(counter, 2);
@@ -144,7 +144,7 @@ describe ('Walker Expressions', function () {
                 done(err);
             }
         });
-        walker.on('node.Identifier', function (node) {
+        walker.on('node.Identifier.enter', function (node) {
             if (counter !== 1) return;
             try {
                 assert.equal(counter, 1);
@@ -154,7 +154,7 @@ describe ('Walker Expressions', function () {
                 done(err);
             }
         });
-        walker.on('node.Literal', function (node) {
+        walker.on('node.Literal.enter', function (node) {
             try {
                 assert.equal(counter, 2);
                 assert.equal(node.value, 1);
@@ -163,7 +163,7 @@ describe ('Walker Expressions', function () {
                 done(err);
             }
         });
-        walker.on('node.Identifier', function (node) {
+        walker.on('node.Identifier.enter', function (node) {
             if (counter !== 3) return;
             try {
                 assert.equal(counter, 3);
@@ -198,7 +198,7 @@ describe ('Walker Expressions', function () {
                 done(err);
             }
         });
-        walker.on('node.Literal', function (node) {
+        walker.on('node.Literal.enter', function (node) {
             try {
                 assert.equal(counter, 1);
                 assert.equal(node.value, 1);
@@ -207,7 +207,7 @@ describe ('Walker Expressions', function () {
                 done(err);
             }
         });
-        walker.on('node.Identifier', function (node) {
+        walker.on('node.Identifier.enter', function (node) {
             try {
                 assert.equal(counter, 2);
                 assert.equal(node.name, 'ok');
@@ -242,7 +242,7 @@ describe ('Walker Expressions', function () {
                 done(err);
             }
         });
-        walker.on('node.Literal', function (node) {
+        walker.on('node.Literal.enter', function (node) {
             if (counter !== 1) return;
             try {
                 assert.equal(counter, 1);
@@ -252,7 +252,7 @@ describe ('Walker Expressions', function () {
                 done(err);
             }
         });
-        walker.on('node.Identifier', function (node) {
+        walker.on('node.Identifier.enter', function (node) {
             try {
                 assert.equal(counter, 2);
                 assert.equal(node.name, 'ok');
@@ -261,7 +261,7 @@ describe ('Walker Expressions', function () {
                 done(err);
             }
         });
-        walker.on('node.Literal', function (node) {
+        walker.on('node.Literal.enter', function (node) {
             if (counter !== 3) return;
             try {
                 assert.equal(counter, 3);
@@ -306,7 +306,7 @@ describe ('Walker Expressions', function () {
                 done(err);
             }
         });
-        walker.on('node.Literal', function (node) {
+        walker.on('node.Literal.enter', function (node) {
             try {
                 assert.equal(counter, 2);
                 counter++;
@@ -314,7 +314,7 @@ describe ('Walker Expressions', function () {
                 done(err);
             }
         });
-        walker.on('node.Identifier', function (node) {
+        walker.on('node.Identifier.enter', function (node) {
             try {
                 assert.equal(counter, 3);
                 assert.equal(node.name, 'x');
@@ -348,7 +348,7 @@ describe ('Walker Expressions', function () {
                 done(err);
             }
         });
-        walker.on('node.Identifier', function (node) {
+        walker.on('node.Identifier.enter', function (node) {
             if (counter !== 1) return;
             try {
                 assert.equal(counter, 1);
@@ -359,7 +359,7 @@ describe ('Walker Expressions', function () {
             }
         });
         var first = true;
-        walker.on('node.Identifier', function (node) {
+        walker.on('node.Identifier.enter', function (node) {
             if (first) {
                 first = false;
                 return;
@@ -399,7 +399,7 @@ describe ('Walker Expressions', function () {
                 done(err);
             }
         });
-        walker.on('node.Identifier', function (node) {
+        walker.on('node.Identifier.enter', function (node) {
             try {
                 assert.equal(counter, 1);
                 assert.equal(node.name, 'bar');
@@ -408,7 +408,7 @@ describe ('Walker Expressions', function () {
                 done(err);
             }
         });
-        walker.on('node.Literal', function (node) {
+        walker.on('node.Literal.enter', function (node) {
             try {
                 assert.equal(counter, 2);
                 assert.equal(node.value, 314);

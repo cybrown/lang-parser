@@ -31,7 +31,7 @@ describe ('Walker Misc', function () {
                 done(err);
             }
         });
-        walker.on('node.Literal', function (node) {
+        walker.on('node.Literal.enter', function (node) {
             try {
                 assert.equal(counter, 2);
                 assert.equal(node.value, 42);

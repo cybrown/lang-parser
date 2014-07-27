@@ -26,7 +26,7 @@ describe ('Walker Declarations', function () {
                 done(err);
             }
         });
-        walker.on('node.Literal', function (node) {
+        walker.on('node.Literal.enter', function (node) {
             try {
                 assert.equal(counter, 1);
                 assert.equal(node.value, 72);
@@ -61,7 +61,7 @@ describe ('Walker Declarations', function () {
                 done(err);
             }
         });
-        walker.on('node.Literal', function (node) {
+        walker.on('node.Literal.enter', function (node) {
             try {
                 assert.equal(counter, 1);
                 assert.equal(node.value, 31);

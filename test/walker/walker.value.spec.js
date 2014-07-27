@@ -12,7 +12,7 @@ describe ('Walker Values', function () {
 
     it ('should walk Literal', function (done) {
         var node = nodes.Literal(42);
-        walker.on('node.Literal', function (node) {
+        walker.on('node.Literal.enter', function (node) {
             try {
                 assert.equal(node.value, 42);
                 done();
@@ -25,7 +25,7 @@ describe ('Walker Values', function () {
 
     it ('should walk Identifier', function (done) {
         var node = nodes.Identifier('a');
-        walker.on('node.Identifier', function (node) {
+        walker.on('node.Identifier.enter', function (node) {
             try {
                 assert.equal(node.name, 'a');
                 done();
