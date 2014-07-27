@@ -306,4 +306,49 @@ describe ('Walker Declarations', function () {
         });
         walker.walk(node);
     });
+
+    it ('should walk NamespaceDeclaration', function (done) {
+        var counter = 0;
+        var node = nodes.NamespaceDeclaration(
+            ['com', 'namespace'],
+            [nodes.ClassDeclaration('Foo', [])]
+        );
+        walker.on('node.NamespaceDeclaration.enter', function (node) {
+            try {
+                assert.equal(node.$type, 'NamespaceDeclaration');
+                assert.equal(counter, 0);
+                counter++;
+            } catch (err) {
+                done(err);
+            }
+        });
+        walker.on('node.ClassDeclaration.enter', function (node) {
+            try {
+                assert.equal(node.$type, 'ClassDeclaration');
+                assert.equal(counter, 1);
+                counter++;
+            } catch (err) {
+                done(err);
+            }
+        });
+        walker.on('node.ClassDeclaration.leave', function (node) {
+            try {
+                assert.equal(node.$type, 'ClassDeclaration');
+                assert.equal(counter, 2);
+                counter++;
+            } catch (err) {
+                done(err);
+            }
+        });
+        walker.on('node.NamespaceDeclaration.leave', function (node) {
+            try {
+                assert.equal(node.$type, 'NamespaceDeclaration');
+                assert.equal(counter, 3);
+                done();
+            } catch (err) {
+                done(err);
+            }
+        });
+        walker.walk(node);
+    });
 });
