@@ -103,6 +103,28 @@ describe ('Walker Declarations', function () {
         walker.walk(node);
     });
 
+    it ('should walk empty InterfaceDeclaration', function (done) {
+        var counter = 0;
+        var node = nodes.InterfaceDeclaration('IFoo', []);
+        walker.on('node.InterfaceDeclaration.enter', function () {
+            try {
+                assert.equal(counter, 0);
+                counter++;
+            } catch (err) {
+                done(err);
+            }
+        });
+        walker.on('node.InterfaceDeclaration.leave', function () {
+            try {
+                assert.equal(counter, 1);
+                done();
+            } catch (err) {
+                done(err);
+            }
+        });
+        walker.walk(node);
+    });
+
     it ('should walk MethodParameter', function (done) {
         var counter = 0;
         var node = nodes.MethodParameter('x', types.PrimitiveType(32, false, false));
