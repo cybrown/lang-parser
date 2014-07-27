@@ -13,6 +13,7 @@
 "throw"               return 'THROW'
 "try"                 return 'TRY'
 "var"                 return 'VAR'
+"namespace"           return 'NAMESPACE'
 
 /* Values */
 [0-9]+"."[0-9]*       return 'LITERAL_DOUBLE'
@@ -104,6 +105,8 @@ Statement
 DeclarationStatement
     : ClassDeclaration
         {$$ = $1;}
+    | NamespaceDeclaration
+        {$$ = $1;}
     | InterfaceDeclaration
         {$$ = $1;}
     | VariableDeclaration
@@ -192,6 +195,15 @@ ConstantDeclaration
         {$$ = yy.node.ConstantDeclaration($2, null, $4);}
     ;
 
+NamespaceDeclaration
+    : NAMESPACE NamespacePath '{' '}'
+        {$$ = yy.node.NamespaceDeclaration($2, []);}
+    | NAMESPACE NamespacePath '{' Statement '}'
+        {$$ = yy.node.NamespaceDeclaration($2, [$4]);}
+    | NAMESPACE NamespacePath '{' StatementList '}'
+        {$$ = yy.node.NamespaceDeclaration($2, $4);}
+    ;
+
 ClassDeclaration
     : CLASS IDENTIFIER '{' '}'
         {$$ = yy.node.ClassDeclaration($2, []);}
@@ -199,12 +211,21 @@ ClassDeclaration
         {$$ = yy.node.ClassDeclaration($2, $4);}
     ;
 
-
 InterfaceDeclaration
     : INTERFACE IDENTIFIER '{' '}'
         {$$ = yy.node.InterfaceDeclaration($2, []);}
     | INTERFACE IDENTIFIER '{' ClassMemberList '}'
         {$$ = yy.node.InterfaceDeclaration($2, $4);}
+    ;
+
+NamespacePath
+    : IDENTIFIER
+        {$$ = [$1];}
+    | NamespacePath '.' IDENTIFIER
+        {
+            $1.push($3);
+            $$ = $1;
+        }
     ;
 
 /* END Declarations */
