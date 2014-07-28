@@ -27,7 +27,12 @@ gulp.task('mocha.walker', function () {
         .pipe(mocha());
 });
 
-gulp.task('mocha', ['mocha.parser', 'mocha.walker']);
+gulp.task('mocha.lowerer', function () {
+    return gulp.src('test/lowerer/*', {read: false})
+        .pipe(mocha());
+});
+
+gulp.task('mocha', ['mocha.parser', 'mocha.walker', 'mocha.lowerer']);
 
 gulp.task('test', function () {
     return runSequence('mocha');
