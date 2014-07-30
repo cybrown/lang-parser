@@ -38,9 +38,24 @@ describe ('Lowerer Class Method', function () {
             'node.MethodParameter.leave',
             nodes.MethodParameter('x', types.PrimitiveType(64, false, false))
         );
+        var expressionStatement = nodes.ExpressionStatement(
+            nodes.BinaryExpression(
+                '+',
+                nodes.Literal(4),
+                nodes.Literal(5)
+            )
+        );
+        walker.emit(
+            'node.ExpressionStatement.enter',
+            expressionStatement
+        );
+        walker.emit(
+            'node.ExpressionStatement.leave',
+            expressionStatement
+        );
         walker.emit(
             'node.ClassMethod.leave',
-            nodes.ClassMethod('getAge', types.PrimitiveType(32, false, false))
+            nodes.ClassMethod('getAge', types.PrimitiveType(32, false, false), [], expressionStatement)
         );
         walker.emit(
             'node.ClassDeclaration.leave',
@@ -56,6 +71,7 @@ describe ('Lowerer Class Method', function () {
         assert.equal(methods[0].value.returnType.$type, 'PrimitiveType');
         assert.equal(methods[0].value.parameters.length, 1);
         assert.equal(methods[0].value.parameters[0].name, 'x');
+        assert.equal(methods[0].value.body.$type, 'ExpressionStatement');
         done();
     });
 });
