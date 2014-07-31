@@ -18,29 +18,31 @@ describe ('Walker Declarations', function () {
             null,
             nodes.Literal(72)
         );
-        walker.on('node.VariableDeclaration.enter', function (node) {
-            try {
-                assert.equal(counter, 0);
-                ++counter;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.Literal.enter', function (node) {
-            try {
-                assert.equal(counter, 1);
-                assert.equal(node.value, 72);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.VariableDeclaration.leave', function (node) {
-            try {
-                assert.equal(counter, 2);
-                done();
-            } catch (err) {
-                done(err);
+        walker.setDelegate({
+            VariableDeclarationEnter: function (node) {
+                try {
+                    assert.equal(counter, 0);
+                    ++counter;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            LiteralEnter: function (node) {
+                try {
+                    assert.equal(counter, 1);
+                    assert.equal(node.value, 72);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            VariableDeclarationLeave: function (node) {
+                try {
+                    assert.equal(counter, 2);
+                    done();
+                } catch (err) {
+                    done(err);
+                }
             }
         });
         walker.walk(node);
@@ -53,29 +55,31 @@ describe ('Walker Declarations', function () {
             null,
             nodes.Literal(31)
         );
-        walker.on('node.ConstantDeclaration.enter', function (node) {
-            try {
-                assert.equal(counter, 0);
-                ++counter;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.Literal.enter', function (node) {
-            try {
-                assert.equal(counter, 1);
-                assert.equal(node.value, 31);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.ConstantDeclaration.leave', function (node) {
-            try {
-                assert.equal(counter, 2);
-                done();
-            } catch (err) {
-                done(err);
+        walker.setDelegate({
+            ConstantDeclarationEnter: function (node) {
+                try {
+                    assert.equal(counter, 0);
+                    ++counter;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            LiteralEnter: function (node) {
+                try {
+                    assert.equal(counter, 1);
+                    assert.equal(node.value, 31);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ConstantDeclarationLeave: function (node) {
+                try {
+                    assert.equal(counter, 2);
+                    done();
+                } catch (err) {
+                    done(err);
+                }
             }
         });
         walker.walk(node);
@@ -84,20 +88,22 @@ describe ('Walker Declarations', function () {
     it ('should walk empty ClassDeclaration', function (done) {
         var counter = 0;
         var node = nodes.ClassDeclaration('Foo', []);
-        walker.on('node.ClassDeclaration.enter', function () {
-            try {
-                assert.equal(counter, 0);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.ClassDeclaration.leave', function () {
-            try {
-                assert.equal(counter, 1);
-                done();
-            } catch (err) {
-                done(err);
+        walker.setDelegate({
+            ClassDeclarationEnter: function () {
+                try {
+                    assert.equal(counter, 0);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ClassDeclarationLeave: function () {
+                try {
+                    assert.equal(counter, 1);
+                    done();
+                } catch (err) {
+                    done(err);
+                }
             }
         });
         walker.walk(node);
@@ -106,20 +112,22 @@ describe ('Walker Declarations', function () {
     it ('should walk empty InterfaceDeclaration', function (done) {
         var counter = 0;
         var node = nodes.InterfaceDeclaration('IFoo', []);
-        walker.on('node.InterfaceDeclaration.enter', function () {
-            try {
-                assert.equal(counter, 0);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.InterfaceDeclaration.leave', function () {
-            try {
-                assert.equal(counter, 1);
-                done();
-            } catch (err) {
-                done(err);
+        walker.setDelegate({
+            InterfaceDeclarationEnter: function () {
+                try {
+                    assert.equal(counter, 0);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            InterfaceDeclarationLeave: function () {
+                try {
+                    assert.equal(counter, 1);
+                    done();
+                } catch (err) {
+                    done(err);
+                }
             }
         });
         walker.walk(node);
@@ -128,21 +136,23 @@ describe ('Walker Declarations', function () {
     it ('should walk MethodParameter', function (done) {
         var counter = 0;
         var node = nodes.MethodParameter('x', types.PrimitiveType(32, false, false));
-        walker.on('node.MethodParameter.enter', function (node) {
-            try {
-                assert.equal(counter, 0);
-                assert.equal(node.type.$type, 'PrimitiveType');
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.MethodParameter.leave', function (node) {
-            try {
-                assert.equal(counter, 1);
-                done();
-            } catch (err) {
-                done(err);
+        walker.setDelegate({
+            MethodParameterEnter: function (node) {
+                try {
+                    assert.equal(counter, 0);
+                    assert.equal(node.type.$type, 'PrimitiveType');
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            MethodParameterLeave: function (node) {
+                try {
+                    assert.equal(counter, 1);
+                    done();
+                } catch (err) {
+                    done(err);
+                }
             }
         });
         walker.walk(node);
@@ -156,53 +166,55 @@ describe ('Walker Declarations', function () {
             [nodes.MethodParameter('x', types.PrimitiveType(32, false, false))],
             nodes.ExpressionStatement(nodes.BinaryExpression('+', null, null))
         );
-        walker.on('node.ClassMethod.enter', function (node) {
-            try {
-                assert.equal(counter, 0);
-                assert.equal(node.$type, 'ClassMethod');
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.MethodParameter.enter', function (node) {
-            try {
-                assert.equal(counter, 1);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.MethodParameter.leave', function (node) {
-            try {
-                assert.equal(counter, 2);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.ExpressionStatement.enter', function (node) {
-            try {
-                assert.equal(counter, 3);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.ExpressionStatement.leave', function (node) {
-            try {
-                assert.equal(counter, 4);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.ClassMethod.leave', function (node) {
-            try {
-                assert.equal(counter, 5);
-                done();
-            } catch (err) {
-                done(err);
+        walker.setDelegate({
+            ClassMethodEnter: function (node) {
+                try {
+                    assert.equal(counter, 0);
+                    assert.equal(node.$type, 'ClassMethod');
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            MethodParameterEnter: function (node) {
+                try {
+                    assert.equal(counter, 1);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            MethodParameterLeave: function (node) {
+                try {
+                    assert.equal(counter, 2);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ExpressionStatementEnter: function (node) {
+                try {
+                    assert.equal(counter, 3);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ExpressionStatementLeave: function (node) {
+                try {
+                    assert.equal(counter, 4);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ClassMethodLeave: function (node) {
+                try {
+                    assert.equal(counter, 5);
+                    done();
+                } catch (err) {
+                    done(err);
+                }
             }
         });
         walker.walk(node);
@@ -211,21 +223,23 @@ describe ('Walker Declarations', function () {
     it ('should walk ClassAttribute', function (done) {
         var counter = 0;
         var node = nodes.ClassAttribute('foo', types.PrimitiveType(32, false, false));
-        walker.on('node.ClassAttribute.enter', function (node) {
-            try {
-                assert.equal(counter, 0);
-                assert.equal(node.type.$type, 'PrimitiveType');
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.ClassAttribute.enter', function (node) {
-            try {
-                assert.equal(counter, 1);
-                done();
-            } catch (err) {
-                done(err);
+        walker.setDelegate({
+            ClassAttributeEnter: function (node) {
+                try {
+                    assert.equal(counter, 0);
+                    assert.equal(node.type.$type, 'PrimitiveType');
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ClassAttributeLeave: function (node) {
+                try {
+                    assert.equal(counter, 1);
+                    done();
+                } catch (err) {
+                    done(err);
+                }
             }
         });
         walker.walk(node);
@@ -242,88 +256,90 @@ describe ('Walker Declarations', function () {
                 nodes.ExpressionStatement(nodes.BinaryExpression('+', null, null))
             )
         ]);
-        walker.on('node.ClassDeclaration.enter', function () {
-            try {
-                assert.equal(counter, 0);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.ClassAttribute.enter', function (node) {
-            try {
-                assert.equal(counter, 1);
-                assert.equal(node.type.$type, 'PrimitiveType');
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.ClassAttribute.enter', function (node) {
-            try {
-                assert.equal(counter, 2);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.ClassMethod.enter', function (node) {
-            try {
-                assert.equal(counter, 3);
-                assert.equal(node.$type, 'ClassMethod');
-                assert.equal(node.name, 'getValue');
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.MethodParameter.enter', function (node) {
-            try {
-                assert.equal(counter, 4);
-                assert.equal(node.name, 'x');
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.MethodParameter.leave', function (node) {
-            try {
-                assert.equal(counter, 5);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.ExpressionStatement.enter', function (node) {
-            try {
-                assert.equal(counter, 6);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.ExpressionStatement.leave', function (node) {
-            try {
-                assert.equal(counter, 7);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.ClassMethod.leave', function (node) {
-            try {
-                assert.equal(counter, 8);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.ClassDeclaration.leave', function () {
-            try {
-                assert.equal(counter, 9);
-                done();
-            } catch (err) {
-                done(err);
+        walker.setDelegate({
+            ClassDeclarationEnter: function () {
+                try {
+                    assert.equal(counter, 0);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ClassAttributeEnter: function (node) {
+                try {
+                    assert.equal(counter, 1);
+                    assert.equal(node.type.$type, 'PrimitiveType');
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ClassAttributeLeave: function (node) {
+                try {
+                    assert.equal(counter, 2);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ClassMethodEnter: function (node) {
+                try {
+                    assert.equal(counter, 3);
+                    assert.equal(node.$type, 'ClassMethod');
+                    assert.equal(node.name, 'getValue');
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            MethodParameterEnter: function (node) {
+                try {
+                    assert.equal(counter, 4);
+                    assert.equal(node.name, 'x');
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            MethodParameterLeave: function (node) {
+                try {
+                    assert.equal(counter, 5);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ExpressionStatementEnter: function (node) {
+                try {
+                    assert.equal(counter, 6);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ExpressionStatementLeave: function (node) {
+                try {
+                    assert.equal(counter, 7);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ClassMethodLeave: function (node) {
+                try {
+                    assert.equal(counter, 8);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ClassDeclarationLeave: function () {
+                try {
+                    assert.equal(counter, 9);
+                    done();
+                } catch (err) {
+                    done(err);
+                }
             }
         });
         walker.walk(node);
@@ -335,40 +351,42 @@ describe ('Walker Declarations', function () {
             ['com', 'namespace'],
             [nodes.ClassDeclaration('Foo', [])]
         );
-        walker.on('node.NamespaceDeclaration.enter', function (node) {
-            try {
-                assert.equal(node.$type, 'NamespaceDeclaration');
-                assert.equal(counter, 0);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.ClassDeclaration.enter', function (node) {
-            try {
-                assert.equal(node.$type, 'ClassDeclaration');
-                assert.equal(counter, 1);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.ClassDeclaration.leave', function (node) {
-            try {
-                assert.equal(node.$type, 'ClassDeclaration');
-                assert.equal(counter, 2);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.NamespaceDeclaration.leave', function (node) {
-            try {
-                assert.equal(node.$type, 'NamespaceDeclaration');
-                assert.equal(counter, 3);
-                done();
-            } catch (err) {
-                done(err);
+        walker.setDelegate({
+            NamespaceDeclarationEnter: function (node) {
+                try {
+                    assert.equal(node.$type, 'NamespaceDeclaration');
+                    assert.equal(counter, 0);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ClassDeclarationEnter: function (node) {
+                try {
+                    assert.equal(node.$type, 'ClassDeclaration');
+                    assert.equal(counter, 1);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ClassDeclarationLeave: function (node) {
+                try {
+                    assert.equal(node.$type, 'ClassDeclaration');
+                    assert.equal(counter, 2);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            NamespaceDeclarationLeave: function (node) {
+                try {
+                    assert.equal(node.$type, 'NamespaceDeclaration');
+                    assert.equal(counter, 3);
+                    done();
+                } catch (err) {
+                    done(err);
+                }
             }
         });
         walker.walk(node);

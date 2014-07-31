@@ -13,28 +13,30 @@ describe ('Walker Expressions', function () {
     it ('should walk UnaryExpression', function (done) {
         var counter = 0;
         var node = nodes.UnaryExpression('!', nodes.Literal(42));
-        walker.on('node.UnaryExpression.enter', function (node) {
-            try {
-                assert.equal(counter, 0);
-                ++counter;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.Literal.enter', function (node) {
-            try {
-                assert.equal(counter, 1);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.UnaryExpression.leave', function (node) {
-            try {
-                assert.equal(counter, 2);
-                done();
-            } catch (err) {
-                done(err);
+        walker.setDelegate({
+            UnaryExpressionEnter: function (node) {
+                try {
+                    assert.equal(counter, 0);
+                    ++counter;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            LiteralEnter: function (node) {
+                try {
+                    assert.equal(counter, 1);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            UnaryExpressionLeave: function (node) {
+                try {
+                    assert.equal(counter, 2);
+                    done();
+                } catch (err) {
+                    done(err);
+                }
             }
         });
         walker.walk(node);
@@ -47,38 +49,40 @@ describe ('Walker Expressions', function () {
             nodes.Literal(1),
             nodes.Literal(2)
         );
-        walker.on('node.BinaryExpression.enter', function (node) {
-            try {
-                assert.equal(node.operator, '+');
-                assert.equal(counter, 0);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.Literal.enter', function (node) {
-            try {
-                if (counter == 1) {
-                    assert.equal(node.value, 1);
-                    assert.equal(counter, 1);
-                } else if (counter === 2) {
-                    assert.equal(node.value, 2);
-                    assert.equal(counter, 2);
-                } else {
-                    throw new Error('Illegal counter');
+        walker.setDelegate({
+            BinaryExpressionEnter: function (node) {
+                try {
+                    assert.equal(node.operator, '+');
+                    assert.equal(counter, 0);
+                    counter++;
+                } catch (err) {
+                    done(err);
                 }
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.BinaryExpression.leave', function (node) {
-            try {
-                assert.equal(node.operator, '+');
-                assert.equal(counter, 3);
-                done();
-            } catch (err) {
-                done(err);
+            },
+            LiteralEnter: function (node) {
+                try {
+                    if (counter == 1) {
+                        assert.equal(node.value, 1);
+                        assert.equal(counter, 1);
+                    } else if (counter === 2) {
+                        assert.equal(node.value, 2);
+                        assert.equal(counter, 2);
+                    } else {
+                        throw new Error('Illegal counter');
+                    }
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            BinaryExpressionLeave: function (node) {
+                try {
+                    assert.equal(node.operator, '+');
+                    assert.equal(counter, 3);
+                    done();
+                } catch (err) {
+                    done(err);
+                }
             }
         });
         walker.walk(node);
@@ -91,40 +95,42 @@ describe ('Walker Expressions', function () {
             nodes.Identifier('variable'),
             nodes.Literal(2)
         );
-        walker.on('node.AssignmentExpression.enter', function (node) {
-            try {
-                assert.equal(node.operator, '+=');
-                assert.equal(counter, 0);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.Identifier.enter', function (node) {
-            try {
-                assert.equal(node.name, 'variable');
-                assert.equal(counter, 1);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.Literal.enter', function (node) {
-            try {
-                assert.equal(node.value, 2);
-                assert.equal(counter, 2);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.AssignmentExpression.leave', function (node) {
-            try {
-                assert.equal(node.operator, '+=');
-                assert.equal(counter, 3);
-                done();
-            } catch (err) {
-                done(err);
+        walker.setDelegate({
+            AssignmentExpressionEnter: function (node) {
+                try {
+                    assert.equal(node.operator, '+=');
+                    assert.equal(counter, 0);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            IdentifierEnter: function (node) {
+                try {
+                    assert.equal(node.name, 'variable');
+                    assert.equal(counter, 1);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            LiteralEnter: function (node) {
+                try {
+                    assert.equal(node.value, 2);
+                    assert.equal(counter, 2);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            AssignmentExpressionLeave: function (node) {
+                try {
+                    assert.equal(node.operator, '+=');
+                    assert.equal(counter, 3);
+                    done();
+                } catch (err) {
+                    done(err);
+                }
             }
         });
         walker.walk(node);
@@ -136,49 +142,50 @@ describe ('Walker Expressions', function () {
             nodes.Literal(1),
             nodes.Identifier('ok')
         ]);
-        walker.on('node.CallExpression.enter', function (node) {
-            try {
-                assert.equal(counter, 0);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.Identifier.enter', function (node) {
-            if (counter !== 1) return;
-            try {
-                assert.equal(counter, 1);
-                assert.equal(node.name, 'func');
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.Literal.enter', function (node) {
-            try {
-                assert.equal(counter, 2);
-                assert.equal(node.value, 1);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.Identifier.enter', function (node) {
-            if (counter !== 3) return;
-            try {
-                assert.equal(counter, 3);
-                assert.equal(node.name, 'ok');
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.CallExpression.leave', function (node) {
-            try {
-                assert.equal(counter, 4);
-                done();
-            } catch (err) {
-                done(err);
+        walker.setDelegate({
+            CallExpressionEnter: function (node) {
+                try {
+                    assert.equal(counter, 0);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            IdentifierEnter: function (node) {
+                if (counter === 1) {
+                    try {
+                        assert.equal(counter, 1);
+                        assert.equal(node.name, 'func');
+                        counter++;
+                    } catch (err) {
+                        done(err);
+                    }
+                } else if (counter === 3) {
+                    try {
+                        assert.equal(counter, 3);
+                        assert.equal(node.name, 'ok');
+                        counter++;
+                    } catch (err) {
+                        done(err);
+                    }
+                }
+            },
+            LiteralLeave: function (node) {
+                try {
+                    assert.equal(counter, 2);
+                    assert.equal(node.value, 1);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            CallExpressionLeave: function (node) {
+                try {
+                    assert.equal(counter, 4);
+                    done();
+                } catch (err) {
+                    done(err);
+                }
             }
         });
         walker.walk(node);
@@ -190,38 +197,40 @@ describe ('Walker Expressions', function () {
             nodes.Literal(1),
             nodes.Identifier('ok')
         ]);
-        walker.on('node.BracketExpression.enter', function (node) {
-            try {
-                assert.equal(counter, 0);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.Literal.enter', function (node) {
-            try {
-                assert.equal(counter, 1);
-                assert.equal(node.value, 1);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.Identifier.enter', function (node) {
-            try {
-                assert.equal(counter, 2);
-                assert.equal(node.name, 'ok');
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.BracketExpression.leave', function (node) {
-            try {
-                assert.equal(counter, 3);
-                done();
-            } catch (err) {
-                done(err);
+        walker.setDelegate({
+            BracketExpressionEnter: function (node) {
+                try {
+                    assert.equal(counter, 0);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            LiteralEnter: function (node) {
+                try {
+                    assert.equal(counter, 1);
+                    assert.equal(node.value, 1);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            IdentifierEnter: function (node) {
+                try {
+                    assert.equal(counter, 2);
+                    assert.equal(node.name, 'ok');
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            BracketExpressionLeave: function (node) {
+                try {
+                    assert.equal(counter, 3);
+                    done();
+                } catch (err) {
+                    done(err);
+                }
             }
         });
         walker.walk(node);
@@ -234,49 +243,50 @@ describe ('Walker Expressions', function () {
             nodes.Identifier('ok'),
             nodes.Literal(42)
         );
-        walker.on('node.ConditionalExpression.enter', function (node) {
-            try {
-                assert.equal(counter, 0);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.Literal.enter', function (node) {
-            if (counter !== 1) return;
-            try {
-                assert.equal(counter, 1);
-                assert.equal(node.value, 1);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.Identifier.enter', function (node) {
-            try {
-                assert.equal(counter, 2);
-                assert.equal(node.name, 'ok');
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.Literal.enter', function (node) {
-            if (counter !== 3) return;
-            try {
-                assert.equal(counter, 3);
-                assert.equal(node.value, 42);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.ConditionalExpression.leave', function (node) {
-            try {
-                assert.equal(counter, 4);
-                done();
-            } catch (err) {
-                done(err);
+        walker.setDelegate({
+            ConditionalExpressionEnter: function (node) {
+                try {
+                    assert.equal(counter, 0);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            LiteralEnter: function (node) {
+                if (counter === 1) {
+                    try {
+                        assert.equal(counter, 1);
+                        assert.equal(node.value, 1);
+                        counter++;
+                    } catch (err) {
+                        done(err);
+                    }
+                } else if (counter === 3) {
+                    try {
+                        assert.equal(counter, 3);
+                        assert.equal(node.value, 42);
+                        counter++;
+                    } catch (err) {
+                        done(err);
+                    }
+                }
+            },
+            IdentifierEnter: function (node) {
+                try {
+                    assert.equal(counter, 2);
+                    assert.equal(node.name, 'ok');
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ConditionalExpressionLeave: function (node) {
+                try {
+                    assert.equal(counter, 4);
+                    done();
+                } catch (err) {
+                    done(err);
+                }
             }
         });
         walker.walk(node);
@@ -289,46 +299,48 @@ describe ('Walker Expressions', function () {
             nodes.Literal(2),
             nodes.Identifier('x')
         ));
-        walker.on('node.LambdaExpression.enter', function (node) {
-            try {
-                assert.equal(counter, 0);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.BinaryExpression.enter', function (node) {
-            try {
-                assert.equal(counter, 1);
-                assert.equal(node.operator, '+');
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.Literal.enter', function (node) {
-            try {
-                assert.equal(counter, 2);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.Identifier.enter', function (node) {
-            try {
-                assert.equal(counter, 3);
-                assert.equal(node.name, 'x');
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.LambdaExpression.leave', function (node) {
-            try {
-                assert.equal(counter, 4);
-                done();
-            } catch (err) {
-                done(err);
+        walker.setDelegate({
+            LambdaExpressionEnter: function (node) {
+                try {
+                    assert.equal(counter, 0);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            BinaryExpressionEnter: function (node) {
+                try {
+                    assert.equal(counter, 1);
+                    assert.equal(node.operator, '+');
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            LiteralEnter: function (node) {
+                try {
+                    assert.equal(counter, 2);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            IdentifierEnter: function (node) {
+                try {
+                    assert.equal(counter, 3);
+                    assert.equal(node.name, 'x');
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            LambdaExpressionLeave: function (node) {
+                try {
+                    assert.equal(counter, 4);
+                    done();
+                } catch (err) {
+                    done(err);
+                }
             }
         });
         walker.walk(node);
@@ -340,66 +352,64 @@ describe ('Walker Expressions', function () {
             nodes.Identifier('bar'),
             nodes.Identifier('foo')
         );
-        walker.on('node.MemberExpression.enter', function (node) {
-            try {
-                assert.equal(counter, 0);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.Identifier.enter', function (node) {
-            if (counter !== 1) return;
-            try {
-                assert.equal(counter, 1);
-                assert.equal(node.name, 'bar');
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
         var first = true;
-        walker.on('node.Identifier.enter', function (node) {
-            if (first) {
-                first = false;
-                return;
-            }
-            if (counter !== 2) return;
-            try {
-                assert.equal(counter, 2);
-                assert.equal(node.name, 'foo');
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.MemberExpression.leave', function (node) {
-            try {
-                assert.equal(counter, 3);
-                counter++;
-                done();
-            } catch (err) {
-                done(err);
+        walker.setDelegate({
+            MemberExpressionEnter: function (node) {
+                try {
+                    assert.equal(counter, 0);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            IdentifierEnter: function (node) {
+                if (counter === 1) {
+                    try {
+                        assert.equal(counter, 1);
+                        assert.equal(node.name, 'bar');
+                        counter++;
+                    } catch (err) {
+                        done(err);
+                    }
+                } else if (counter === 2) {
+                    try {
+                        assert.equal(counter, 2);
+                        assert.equal(node.name, 'foo');
+                        counter++;
+                    } catch (err) {
+                        done(err);
+                    }
+                }
+            },
+            MemberExpressionLeave: function (node) {
+                try {
+                    assert.equal(counter, 3);
+                    counter++;
+                    done();
+                } catch (err) {
+                    done(err);
+                }
             }
         });
         walker.walk(node);
     });
 
-    it ('should walk SubscriptExpression', function (done) {
-        var counter = 0;
-        var node = nodes.SubscriptExpression(
-            nodes.Identifier('bar'),
-            nodes.Literal(314)
-        );
-        walker.on('node.SubscriptExpression.enter', function (node) {
+it ('should walk SubscriptExpression', function (done) {
+    var counter = 0;
+    var node = nodes.SubscriptExpression(
+        nodes.Identifier('bar'),
+        nodes.Literal(314)
+    );
+    walker.setDelegate({
+        SubscriptExpressionEnter: function (node) {
             try {
                 assert.equal(counter, 0);
                 counter++;
             } catch (err) {
                 done(err);
             }
-        });
-        walker.on('node.Identifier.enter', function (node) {
+        },
+        IdentifierEnter: function (node) {
             try {
                 assert.equal(counter, 1);
                 assert.equal(node.name, 'bar');
@@ -407,8 +417,8 @@ describe ('Walker Expressions', function () {
             } catch (err) {
                 done(err);
             }
-        });
-        walker.on('node.Literal.enter', function (node) {
+        },
+        LiteralEnter: function (node) {
             try {
                 assert.equal(counter, 2);
                 assert.equal(node.value, 314);
@@ -416,8 +426,8 @@ describe ('Walker Expressions', function () {
             } catch (err) {
                 done(err);
             }
-        });
-        walker.on('node.SubscriptExpression.leave', function (node) {
+        },
+        SubscriptExpressionLeave: function (node) {
             try {
                 assert.equal(counter, 3);
                 counter++;
@@ -425,7 +435,8 @@ describe ('Walker Expressions', function () {
             } catch (err) {
                 done(err);
             }
-        });
-        walker.walk(node);
+        }
     });
+    walker.walk(node);
+});
 });

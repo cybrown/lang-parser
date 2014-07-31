@@ -15,45 +15,47 @@ describe ('Walker Misc', function () {
         var node = nodes.Program([
             nodes.ExpressionStatement(nodes.Literal(42))
         ]);
-        walker.on('node.Program.enter', function (node) {
-            try {
-                assert.equal(counter, 0);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.ExpressionStatement.enter', function (node) {
-            try {
-                assert.equal(counter, 1);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.Literal.enter', function (node) {
-            try {
-                assert.equal(counter, 2);
-                assert.equal(node.value, 42);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.ExpressionStatement.leave', function (node) {
-            try {
-                assert.equal(counter, 3);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.Program.leave', function (node) {
-            try {
-                assert.equal(counter, 4);
-                done();
-            } catch (err) {
-                done(err);
+        walker.setDelegate({
+            ProgramEnter: function (node) {
+                try {
+                    assert.equal(counter, 0);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ExpressionStatementEnter: function (node) {
+                try {
+                    assert.equal(counter, 1);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            LiteralEnter: function (node) {
+                try {
+                    assert.equal(counter, 2);
+                    assert.equal(node.value, 42);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ExpressionStatementLeave: function (node) {
+                try {
+                    assert.equal(counter, 3);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ProgramLeave: function (node) {
+                try {
+                    assert.equal(counter, 4);
+                    done();
+                } catch (err) {
+                    done(err);
+                }
             }
         });
         walker.walk(node);
@@ -65,8 +67,10 @@ describe ('Walker Misc', function () {
             null,
             null
         );
-        walker.on('node.VariableDeclaration.leave', function () {
-            done();
+        walker.setDelegate({
+            VariableDeclarationLeave: function () {
+                done();
+            }
         });
         walker.walk(node);
     })
