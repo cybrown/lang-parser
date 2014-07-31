@@ -15,37 +15,39 @@ describe ('Walker Expressions', function () {
         var node = nodes.ExpressionStatement(
             nodes.BinaryExpression('+', nodes.Literal(1), nodes.Literal(2))
         );
-        walker.on('node.ExpressionStatement.enter', function (node) {
-            try {
-                assert.equal(counter, 0);
-                ++counter;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.BinaryExpression.enter', function (node) {
-            try {
-                assert.equal(counter, 1);
-                assert.equal(node.operator, '+');
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.BinaryExpression.leave', function (node) {
-            try {
-                assert.equal(counter, 2);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.ExpressionStatement.leave', function (node) {
-            try {
-                assert.equal(counter, 3);
-                done();
-            } catch (err) {
-                done(err);
+        walker.setDelegate({
+            ExpressionStatementEnter: function (node) {
+                try {
+                    assert.equal(counter, 0);
+                    ++counter;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            BinaryExpressionEnter: function (node) {
+                try {
+                    assert.equal(counter, 1);
+                    assert.equal(node.operator, '+');
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            BinaryExpressionLeave: function (node) {
+                try {
+                    assert.equal(counter, 2);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ExpressionStatementLeave: function (node) {
+                try {
+                    assert.equal(counter, 3);
+                    done();
+                } catch (err) {
+                    done(err);
+                }
             }
         });
         walker.walk(node);
@@ -62,45 +64,47 @@ describe ('Walker Expressions', function () {
                 )
             )
         );
-        walker.on('node.BlockStatement.enter', function (node) {
-            try {
-                assert.equal(counter, 0);
-                ++counter;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.ExpressionStatement.enter', function (node) {
-            try {
-                assert.equal(counter, 1);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.BinaryExpression.enter', function (node) {
-            try {
-                assert.equal(counter, 2);
-                assert.equal(node.operator, '+');
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.ExpressionStatement.leave', function (node) {
-            try {
-                assert.equal(counter, 3);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.BlockStatement.leave', function (node) {
-            try {
-                assert.equal(counter, 4);
-                done();
-            } catch (err) {
-                done(err);
+        walker.setDelegate({
+            BlockStatementEnter: function (node) {
+                try {
+                    assert.equal(counter, 0);
+                    ++counter;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ExpressionStatementEnter: function (node) {
+                try {
+                    assert.equal(counter, 1);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            BinaryExpressionEnter: function (node) {
+                try {
+                    assert.equal(counter, 2);
+                    assert.equal(node.operator, '+');
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ExpressionStatementLeave: function (node) {
+                try {
+                    assert.equal(counter, 3);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            BlockStatementLeave: function (node) {
+                try {
+                    assert.equal(counter, 4);
+                    done();
+                } catch (err) {
+                    done(err);
+                }
             }
         });
         walker.walk(node);
@@ -111,29 +115,31 @@ describe ('Walker Expressions', function () {
         var node = nodes.ReturnStatement(
             nodes.Literal(2)
         );
-        walker.on('node.ReturnStatement.enter', function (node) {
-            try {
-                assert.equal(counter, 0);
-                ++counter;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.Literal.enter', function (node) {
-            try {
-                assert.equal(counter, 1);
-                assert.equal(node.value, 2);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.ReturnStatement.leave', function (node) {
-            try {
-                assert.equal(counter, 2);
-                done();
-            } catch (err) {
-                done(err);
+        walker.setDelegate({
+            ReturnStatementEnter: function (node) {
+                try {
+                    assert.equal(counter, 0);
+                    ++counter;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            LiteralEnter: function (node) {
+                try {
+                    assert.equal(counter, 1);
+                    assert.equal(node.value, 2);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ReturnStatementLeave: function (node) {
+                try {
+                    assert.equal(counter, 2);
+                    done();
+                } catch (err) {
+                    done(err);
+                }
             }
         });
         walker.walk(node);
@@ -144,29 +150,31 @@ describe ('Walker Expressions', function () {
         var node = nodes.ThrowStatement(
             nodes.Literal(2)
         );
-        walker.on('node.ThrowStatement.enter', function (node) {
-            try {
-                assert.equal(counter, 0);
-                ++counter;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.Literal.enter', function (node) {
-            try {
-                assert.equal(counter, 1);
-                assert.equal(node.value, 2);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.ThrowStatement.leave', function (node) {
-            try {
-                assert.equal(counter, 2);
-                done();
-            } catch (err) {
-                done(err);
+        walker.setDelegate({
+            ThrowStatementEnter: function (node) {
+                try {
+                    assert.equal(counter, 0);
+                    ++counter;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            LiteralEnter: function (node) {
+                try {
+                    assert.equal(counter, 1);
+                    assert.equal(node.value, 2);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ThrowStatementLeave: function (node) {
+                try {
+                    assert.equal(counter, 2);
+                    done();
+                } catch (err) {
+                    done(err);
+                }
             }
         });
         walker.walk(node);
@@ -187,66 +195,68 @@ describe ('Walker Expressions', function () {
                 nodes.Literal(42)
             )
         );
-        walker.on('node.TryStatement.enter', function () {
-            try {
-                assert.equal(counter, 0);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.ThrowStatement.enter', function () {
-            try {
-                assert.equal(counter, 1);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.ThrowStatement.leave', function () {
-            try {
-                assert.equal(counter, 2);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.CatchClause.enter', function () {
-            try {
-                assert.equal(counter, 3);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.CatchClause.leave', function () {
-            try {
-                assert.equal(counter, 6);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.ExpressionStatement.enter', function () {
-            try {
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.ExpressionStatement.leave', function () {
-            try {
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.TryStatement.leave', function () {
-            try {
-                assert.equal(counter, 9);
-                done();
-            } catch (err) {
-                done(err);
+        walker.setDelegate({
+            TryStatementEnter: function () {
+                try {
+                    assert.equal(counter, 0);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ThrowStatementEnter: function () {
+                try {
+                    assert.equal(counter, 1);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ThrowStatementLeave: function () {
+                try {
+                    assert.equal(counter, 2);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            CatchClauseEnter: function () {
+                try {
+                    assert.equal(counter, 3);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            CatchClauseLeave: function () {
+                try {
+                    assert.equal(counter, 6);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ExpressionStatementEnter: function () {
+                try {
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ExpressionStatementLeave: function () {
+                try {
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            TryStatementLeave: function () {
+                try {
+                    assert.equal(counter, 9);
+                    done();
+                } catch (err) {
+                    done(err);
+                }
             }
         });
         walker.walk(node);
@@ -259,36 +269,38 @@ describe ('Walker Expressions', function () {
                 nodes.Literal(42)
             )
         );
-        walker.on('node.CatchClause.enter', function () {
-            try {
-                assert.equal(counter, 0);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.ExpressionStatement.enter', function () {
-            try {
-                assert.equal(counter, 1);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.ExpressionStatement.leave', function () {
-            try {
-                assert.equal(counter, 2);
-                counter++;
-            } catch (err) {
-                done(err);
-            }
-        });
-        walker.on('node.CatchClause.leave', function () {
-            try {
-                assert.equal(counter, 3);
-                done();
-            } catch (err) {
-                done(err);
+        walker.setDelegate({
+            CatchClauseEnter: function () {
+                try {
+                    assert.equal(counter, 0);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ExpressionStatementEnter: function () {
+                try {
+                    assert.equal(counter, 1);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            ExpressionStatementLeave: function () {
+                try {
+                    assert.equal(counter, 2);
+                    counter++;
+                } catch (err) {
+                    done(err);
+                }
+            },
+            CatchClauseLeave: function () {
+                try {
+                    assert.equal(counter, 3);
+                    done();
+                } catch (err) {
+                    done(err);
+                }
             }
         });
         walker.walk(node);
