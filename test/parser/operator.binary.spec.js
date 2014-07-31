@@ -1,7 +1,7 @@
 var assert = require('assert');
 var parser = require('../../lib/parserw');
 
-describe ('Operator', function () {
+describe ('Operator Binary', function () {
 
     // Member
 

@@ -1,7 +1,7 @@
 var assert = require('assert');
 var parser = require('../../lib/parserw');
 
-describe ('Operator', function () {
+describe ('Operator Assignment', function () {
 
     it ('should be right to left', function () {
         var ast = parser.parse('baz = foo = 42;');
