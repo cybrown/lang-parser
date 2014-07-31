@@ -28,7 +28,7 @@ describe ('Class', function () {
         assert.strictEqual(ast.body[0].members[0].$type, 'ClassMethod');
         assert.strictEqual(ast.body[0].members[0].returnType, null);
         assert.strictEqual(ast.body[0].members[0].name, 'getAge');
-        assert.strictEqual(ast.body[0].members[0].parameters.length, 0);
+        assert.strictEqual(ast.body[0].members[0].params.length, 0);
     });
 
     it ('should parse a class with two methods', function () {
@@ -39,10 +39,10 @@ describe ('Class', function () {
         assert.strictEqual(ast.body[0].members[0].$type, 'ClassMethod');
         assert.strictEqual(ast.body[0].members[0].returnType, null);
         assert.strictEqual(ast.body[0].members[0].name, 'getAge');
-        assert.strictEqual(ast.body[0].members[0].parameters.length, 0);
+        assert.strictEqual(ast.body[0].members[0].params.length, 0);
         assert.strictEqual(ast.body[0].members[1].$type, 'ClassMethod');
         assert.strictEqual(ast.body[0].members[1].returnType.name, 'string');
         assert.strictEqual(ast.body[0].members[1].name, 'getName');
-        assert.strictEqual(ast.body[0].members[1].parameters.length, 0);
+        assert.strictEqual(ast.body[0].members[1].params.length, 0);
     });
 });
