@@ -73,5 +73,21 @@ describe ('Walker Misc', function () {
             }
         });
         walker.walk(node);
-    })
+    });
+
+    it ('should call onUnknown if method not present', function (done) {
+        var node = nodes.ClassAttribute('foo', null);
+        var callDone = false;
+        walker.setDelegate({
+            onUnknown: function (pNode) {
+                if (pNode === node) {
+                    if (!callDone) {
+                        done();
+                        callDone = !callDone;
+                    }
+                }
+            }
+        });
+        walker.walk(node);
+    });
 });
