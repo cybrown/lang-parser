@@ -268,9 +268,9 @@ ClassMethod
 MethodParameterList
     : MethodParameter
         {$$ = [$1];}
-    | MethodParameterList MethodParameter
+    | MethodParameterList ',' MethodParameter
         {
-            $1.push($2);
+            $1.push($3);
             $$ = $1;
         }
     ;
