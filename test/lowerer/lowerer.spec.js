@@ -151,5 +151,39 @@ describe ('Lowerer', function () {
             assert.equal(node.expression.arguments[1].value, 10);
             done();
         });
+
+        it ('should convert && to ConditionnalExpression', function (done) {
+            var leftNode = nodes.Literal(42, null);
+            var rightNode = nodes.Literal(10);
+            var exprNode = nodes.BinaryExpression(
+                '&&',
+                leftNode,
+                rightNode
+            );
+            var node = nodes.ExpressionStatement(exprNode);
+            lowerer.process(node);
+            assert.equal(node.expression.$type, 'ConditionalExpression');
+            assert.equal(node.expression.test, leftNode);
+            assert.equal(node.expression.consequent, leftNode);
+            assert.equal(node.expression.alternate, rightNode);
+            done();
+        });
+
+        it ('should convert || to ConditionnalExpression', function (done) {
+            var leftNode = nodes.Literal(42, null);
+            var rightNode = nodes.Literal(10);
+            var exprNode = nodes.BinaryExpression(
+                '||',
+                leftNode,
+                rightNode
+            );
+            var node = nodes.ExpressionStatement(exprNode);
+            lowerer.process(node);
+            assert.equal(node.expression.$type, 'ConditionalExpression');
+            assert.equal(node.expression.test, leftNode);
+            assert.equal(node.expression.consequent, rightNode);
+            assert.equal(node.expression.alternate, leftNode);
+            done();
+        });
     });
 });
