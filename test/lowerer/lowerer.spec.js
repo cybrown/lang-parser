@@ -149,6 +149,36 @@ describe ('Lowerer', function () {
             assert.equal(node.expression.arguments[0].value, 42);
             done();
         });
+
+        it ('should convert prefix ++ to assignment expression and return value', function (done) {
+            var value = nodes.Identifier('c');
+            var exprNode = nodes.UnaryExpression('++', value, true);
+            var node = nodes.ExpressionStatement(exprNode);
+            lowerer.process(node);
+            assert.equal(node.expression.$type, 'AssignmentExpression');
+            assert.equal(node.expression.left, value);
+            assert.equal(node.expression.right.$type, 'CallExpression');
+            assert.equal(node.expression.right.callee.name, '$binary$+');
+            assert.equal(node.expression.right.arguments.length, 2);
+            assert.equal(node.expression.right.arguments[0], value);
+            assert.equal(node.expression.right.arguments[1].value, '1');
+            done();
+        });
+
+        it ('should convert prefix -- to assignment expression and return value', function (done) {
+            var value = nodes.Identifier('c');
+            var exprNode = nodes.UnaryExpression('--', value, true);
+            var node = nodes.ExpressionStatement(exprNode);
+            lowerer.process(node);
+            assert.equal(node.expression.$type, 'AssignmentExpression');
+            assert.equal(node.expression.left, value);
+            assert.equal(node.expression.right.$type, 'CallExpression');
+            assert.equal(node.expression.right.callee.name, '$binary$-');
+            assert.equal(node.expression.right.arguments.length, 2);
+            assert.equal(node.expression.right.arguments[0], value);
+            assert.equal(node.expression.right.arguments[1].value, '1');
+            done();
+        });
     });
 
     describe ('AssignmentExpression', function () {
