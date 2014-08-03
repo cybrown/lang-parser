@@ -30,12 +30,44 @@ var builtins = {
         stack.pop();
         stack.push(a - b);
     },
+    '*': function (stack) {
+        var b = stack[stack.length - 1];
+        stack.pop();
+        var a = stack[stack.length - 1];
+        stack.pop();
+        stack.push(a * b);
+    },
+    '==': function (stack) {
+        var b = stack[stack.length - 1];
+        stack.pop();
+        var a = stack[stack.length - 1];
+        stack.pop();
+        stack.push(a === b);
+    },
+    '!=': function (stack) {
+        var b = stack[stack.length - 1];
+        stack.pop();
+        var a = stack[stack.length - 1];
+        stack.pop();
+        stack.push(a !== b);
+    },
     print: function (stack) {
         console.log(stack[stack.length - 1]);
     }
 };
 
 var stack = [];
+
+var _push = stack.push.bind(stack);
+Object.defineProperty(stack, 'push', {
+    iterable: false,
+    value: function (value) {
+        _push(value);
+        if (value === null) {
+            1+1;
+        }
+    }
+});
 
 var doLoad = true;
 
@@ -103,7 +135,8 @@ runner.setDelegate({
         }
     },
     CallExpressionEnter: function (node) {
-        if (node.callee.$type === 'MemberExpression') {
+        if (node.callee.$type === 'MemberExpression' && !node.isThisAdded) {
+            node.isThisAdded = true;
             node.arguments.unshift(node.callee.object);
         }
     },
@@ -146,6 +179,29 @@ runner.setDelegate({
         } else {
             stack.push([obj, node.property]);
         }
+    },
+    ConditionalExpressionEnter: function (node) {
+        if (node.consequent) {
+            node._consequent = node.consequent;
+            node.consequent = null;
+        }
+        if (node.alternate) {
+            node._alternate = node.alternate;
+            node.alternate = null;
+        }
+    },
+    ConditionalExpressionLeave: function (node) {
+        var test = stack[stack.length - 1];
+        stack.pop();
+        if (test) {
+            runner.walk(node._consequent);
+        } else {
+            runner.walk(node._alternate);
+        }
+        1+1;
+    },
+    ReturnStatementEnter: function (node) {
+        1+1;
     },
     ReturnStatementLeave: function (node) {
         var err = new Error('ok');
@@ -211,6 +267,5 @@ var instantiate = function (cls) {
 var firstObject = instantiate(program.namespaces['main'].classes['Main']);
 
 stack.push(firstObject);
-stack.push(20);
-stack.push(30);
+stack.push(10);
 callMethod(program.namespaces['main'].classes['Main'].methods.main);
