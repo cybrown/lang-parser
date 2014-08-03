@@ -16,7 +16,7 @@ describe ('Precedence', function () {
         assert.strictEqual(ast.body[0].expression.$type, 'MemberExpression');
         assert.strictEqual(ast.body[0].expression.object.object.name, 'a');
         assert.strictEqual(ast.body[0].expression.object.index.name, 'b');
-        assert.strictEqual(ast.body[0].expression.property.name, 'c');
+        assert.strictEqual(ast.body[0].expression.property, 'c');
     });
 
     it ('* over +', function () {

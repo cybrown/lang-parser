@@ -350,7 +350,7 @@ describe ('Walker Expressions', function () {
         var counter = 0;
         var node = nodes.MemberExpression(
             nodes.Identifier('bar'),
-            nodes.Identifier('foo')
+            'foo'
         );
         var first = true;
         walker.setDelegate({
@@ -363,27 +363,17 @@ describe ('Walker Expressions', function () {
                 }
             },
             IdentifierEnter: function (node) {
-                if (counter === 1) {
-                    try {
-                        assert.equal(counter, 1);
-                        assert.equal(node.name, 'bar');
-                        counter++;
-                    } catch (err) {
-                        done(err);
-                    }
-                } else if (counter === 2) {
-                    try {
-                        assert.equal(counter, 2);
-                        assert.equal(node.name, 'foo');
-                        counter++;
-                    } catch (err) {
-                        done(err);
-                    }
+                try {
+                    assert.equal(counter, 1);
+                    assert.equal(node.name, 'bar');
+                    counter++;
+                } catch (err) {
+                    done(err);
                 }
             },
             MemberExpressionLeave: function (node) {
                 try {
-                    assert.equal(counter, 3);
+                    assert.equal(counter, 2);
                     counter++;
                     done();
                 } catch (err) {
