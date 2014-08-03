@@ -101,20 +101,34 @@ describe ('Lowerer', function () {
                 done();
             });
         });
+
+        describe ('Reference to class', function () {
+
+            it ('should add a reference to the class in the method', function (done) {
+                var methodNode = nodes.ClassMethod('myMethod', null, [], []);
+                var classNode = nodes.ClassDeclaration('foo', [methodNode]);
+                var node = nodes.Program([
+                    nodes.NamespaceDeclaration(['foo'], [classNode])
+                ]);
+                lowerer.process(node);
+                assert.equal(methodNode.$$class, classNode);
+                done();
+            });
+        });
     });
 
     describe ('BinaryExpression', function () {
 
         it ('should convert binary expression to function calls', function (done) {
             var exprNode = nodes.BinaryExpression(
-                '+',
+                '-',
                 nodes.Literal(42, null),
                 nodes.Literal(10)
             );
             var node = nodes.ExpressionStatement(exprNode);
             lowerer.process(node);
             assert.equal(node.expression.$type, 'CallExpression');
-            assert.equal(node.expression.callee.name, '+');
+            assert.equal(node.expression.callee.name, '-');
             assert.equal(node.expression.arguments.length, 2);
             assert.equal(node.expression.arguments[0].value, 42);
             assert.equal(node.expression.arguments[1].value, 10);
