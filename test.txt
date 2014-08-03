@@ -1,0 +1,17 @@
+namespace main {
+
+    class Main {
+
+        number :int;
+
+        main (num :int) {
+            this.number = num;
+            var res = this.fact(this.number);
+            print(res);
+        }
+
+        fact (num :int) {
+            return num == 0 ? 1 : num * this.fact(num - 1);
+        }
+    }
+}

@@ -268,9 +268,9 @@ ClassMethod
 MethodParameterList
     : MethodParameter
         {$$ = [$1];}
-    | MethodParameterList MethodParameter
+    | MethodParameterList ',' MethodParameter
         {
-            $1.push($2);
+            $1.push($3);
             $$ = $1;
         }
     ;
@@ -465,7 +465,7 @@ MemberExpression
     : PrimaryExpression
         {$$ = $1;}
     | MemberExpression '.' IDENTIFIER
-        {$$ = yy.node.MemberExpression($1, yy.node.Identifier($3));}
+        {$$ = yy.node.MemberExpression($1, $3);}
     | MemberExpression '[' Expression ']'
         {$$ = yy.node.SubscriptExpression($1, $3);}
     ;

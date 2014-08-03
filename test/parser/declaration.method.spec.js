@@ -41,6 +41,22 @@ describe ('Class Method', function () {
         assert.strictEqual(ast.body[0].members[0].body.$type, 'BlockStatement');
     });
 
+    it ('should parse a method with two parameters', function () {
+        var ast = parser.parse('class Foo { getAge(a: int, b: long) {1;} }');
+        assert.strictEqual(ast.body[0].$type, 'ClassDeclaration');
+        assert.strictEqual(ast.body[0].name, 'Foo');
+        assert.strictEqual(ast.body[0].members.length, 1);
+        assert.strictEqual(ast.body[0].members[0].$type, 'ClassMethod');
+        assert.strictEqual(ast.body[0].members[0].returnType, null);
+        assert.strictEqual(ast.body[0].members[0].name, 'getAge');
+        assert.strictEqual(ast.body[0].members[0].params.length, 2);
+        assert.strictEqual(ast.body[0].members[0].params[0].type.name, 'int');
+        assert.strictEqual(ast.body[0].members[0].params[0].name, 'a');
+        assert.strictEqual(ast.body[0].members[0].params[1].type.name, 'long');
+        assert.strictEqual(ast.body[0].members[0].params[1].name, 'b');
+        assert.strictEqual(ast.body[0].members[0].body.$type, 'BlockStatement');
+    });
+
     it ('should parse a method with one parameter and type', function () {
         var ast = parser.parse('class Foo { getAge(a: int): int {1;} }');
         assert.strictEqual(ast.body[0].$type, 'ClassDeclaration');

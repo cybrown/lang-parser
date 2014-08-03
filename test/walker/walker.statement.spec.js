@@ -2,7 +2,7 @@ var Walker = require('../../lib/walker');
 var nodes = require('../../lib/nodes');
 var assert = require('assert');
 
-describe ('Walker Expressions', function () {
+describe ('Walker Statements', function () {
 
     var walker;
 
