@@ -1,14 +1,26 @@
 namespace main {
     class Main {
-        main () {
-            var a :int;
-            a = 42;
-            print(a);
-            do(9, 4);
+
+        na :int;
+        nb :int;
+
+        main (num_a :int, num_b :int) {
+            this.na = num_a;
+            this.nb = num_b;
+            print(this.addAndSub(this.na, this.nb, 10));
         }
 
-        do (a :int, b :int) {
-            print(a - b);
+        addAndSub (a :int, b :int, c :int) {
+            var res = a + b;
+            print(res);
+            return this.sub(res, c);
+        }
+
+        sub (a :int, b :int) {
+            var res :int;
+            res = a - b;
+            print(res);
+            return res;
         }
     }
 }

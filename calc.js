@@ -40,7 +40,12 @@ var stack = [];
 var doLoad = true;
 
 var setValue = function (name, value) {
+    getValue(name);
     scope[name] = value;
+};
+
+var defineValue = function (name) {
+    scope[name] = undefined;
 };
 
 var getValue = function (name, pScope) {
@@ -77,13 +82,15 @@ var deleteScope = function () {
 
 var curClass = program.namespaces.main.classes.Main;
 
-//Object.keys(program.namespaces.main.classes.Main.methods).forEach(function (key) {
-//    scope[key] = program.namespaces.main.classes.Main.methods[key];
-//});
-
-newScope();
-
 runner.setDelegate({
+    VariableDeclarationLeave: function (node) {
+        defineValue(node.name);
+        if (node.init) {
+            var value = stack[stack.length - 1];
+            stack.pop();
+            setValue(node.name, value);
+        }
+    },
     LiteralLeave: function (node) {
         stack.push(Number(node.value));
     },
@@ -92,8 +99,13 @@ runner.setDelegate({
             stack.push(getValue(node.name));
         } else {
             stack.push(node.name);
+            doLoad = true;
         }
-        doLoad = true;
+    },
+    CallExpressionEnter: function (node) {
+        if (node.callee.$type === 'MemberExpression') {
+            node.arguments.unshift(node.callee.object);
+        }
     },
     CallExpressionLeave: function (node) {
         var method = stack[stack.length - 1];
@@ -108,15 +120,37 @@ runner.setDelegate({
         stack.pop();
     },
     AssignmentExpressionEnter: function (node) {
-        doLoad = false;
+        if (node.left.$type === 'MemberExpression') {
+            node.left.doLoad = false;
+        } else {
+            doLoad = false;
+        }
     },
     AssignmentExpressionLeave: function (node) {
         var b = stack[stack.length - 1];
         stack.pop();
         var a = stack[stack.length - 1];
         stack.pop();
-        setValue(a, b);
+        if (Array.isArray(a)) {
+            a[0][a[1]] = b;
+        } else {
+            setValue(a, b);
+        }
         stack.push(b);
+    },
+    MemberExpressionLeave: function (node) {
+        var obj = stack[stack.length - 1];
+        stack.pop();
+        if (node.doLoad !== false) {
+            stack.push(obj[node.property]);
+        } else {
+            stack.push([obj, node.property]);
+        }
+    },
+    ReturnStatementLeave: function (node) {
+        var err = new Error('ok');
+        err.returnFromCall = true;
+        throw err;
     },
     BlockStatementEnter: function (node) {
         newScope();
@@ -125,7 +159,7 @@ runner.setDelegate({
         deleteScope();
     },
     onUnknown: function (node) {
-        console.error('Unknown node type: ' + node.$type);
+        //console.error('Unknown node type: ' + node.$type);
     }
 });
 
@@ -146,17 +180,37 @@ var deleteFrame = function () {
 var callMethod = function (method) {
     newFrame();
     newScope();
-    var cls = method.$$class;
-    Object.keys(cls.methods).forEach(function (key) {
-        scope[key] = cls.methods[key];
-    });
     for (var i = method.params.length - 1; i >= 0; i--) {
         scope[method.params[i].name] = stack[stack.length - 1];
         stack.pop();
     }
-    runner.walk(method.body);
+    scope['this'] = stack[stack.length - 1];
+    stack.pop();
+    try {
+        runner.walk(method.body);
+    } catch (err) {
+        if (!err.returnFromCall) {
+            throw err;
+        }
+    }
     deleteScope();
     deleteFrame();
 };
 
+var instantiate = function (cls) {
+    var data = {};
+    Object.keys(cls.attributes).forEach(function (attributeName) {
+        data[cls.attributes[attributeName].name] = 0;
+    });
+    Object.keys(cls.methods).forEach(function (methodName) {
+        data[cls.methods[methodName].name] = cls.methods[methodName];
+    });
+    return data;
+};
+
+var firstObject = instantiate(program.namespaces['main'].classes['Main']);
+
+stack.push(firstObject);
+stack.push(20);
+stack.push(30);
 callMethod(program.namespaces['main'].classes['Main'].methods.main);
