@@ -16,35 +16,35 @@ lowerer.process(program);
 var runner = new Walker();
 
 var builtins = {
-    '+': function (stack) {
+    '$binary$+': function (stack) {
         var b = stack[stack.length - 1];
         stack.pop();
         var a = stack[stack.length - 1];
         stack.pop();
         stack.push(a + b);
     },
-    '-': function (stack) {
+    '$binary$-': function (stack) {
         var b = stack[stack.length - 1];
         stack.pop();
         var a = stack[stack.length - 1];
         stack.pop();
         stack.push(a - b);
     },
-    '*': function (stack) {
+    '$binary$*': function (stack) {
         var b = stack[stack.length - 1];
         stack.pop();
         var a = stack[stack.length - 1];
         stack.pop();
         stack.push(a * b);
     },
-    '==': function (stack) {
+    '$binary$==': function (stack) {
         var b = stack[stack.length - 1];
         stack.pop();
         var a = stack[stack.length - 1];
         stack.pop();
         stack.push(a === b);
     },
-    '!=': function (stack) {
+    '$binary$!=': function (stack) {
         var b = stack[stack.length - 1];
         stack.pop();
         var a = stack[stack.length - 1];

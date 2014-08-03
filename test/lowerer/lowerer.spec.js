@@ -134,6 +134,23 @@ describe ('Lowerer', function () {
         });
     });
 
+    describe ('UnaryExpression', function () {
+
+        it ('should convert unary expresison to function calls', function (done) {
+            var exprNode = nodes.UnaryExpression(
+                '!',
+                nodes.Literal(42, null)
+            );
+            var node = nodes.ExpressionStatement(exprNode);
+            lowerer.process(node);
+            assert.equal(node.expression.$type, 'CallExpression');
+            assert.equal(node.expression.callee.name, '$unary$!');
+            assert.equal(node.expression.arguments.length, 1);
+            assert.equal(node.expression.arguments[0].value, 42);
+            done();
+        });
+    });
+
     describe ('BinaryExpression', function () {
 
         it ('should convert binary expression to function calls', function (done) {
@@ -145,7 +162,7 @@ describe ('Lowerer', function () {
             var node = nodes.ExpressionStatement(exprNode);
             lowerer.process(node);
             assert.equal(node.expression.$type, 'CallExpression');
-            assert.equal(node.expression.callee.name, '-');
+            assert.equal(node.expression.callee.name, '$binary$-');
             assert.equal(node.expression.arguments.length, 2);
             assert.equal(node.expression.arguments[0].value, 42);
             assert.equal(node.expression.arguments[1].value, 10);
