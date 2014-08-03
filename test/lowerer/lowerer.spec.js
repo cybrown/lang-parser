@@ -151,6 +151,23 @@ describe ('Lowerer', function () {
         });
     });
 
+    describe ('AssignmentExpression', function () {
+
+        it ('should lower operator and assignment expressions', function (done) {
+            var left = nodes.Identifier('foo');
+            var right = nodes.Literal(42, null);
+            var asgn = nodes.AssignmentExpression('+=', left, right);
+            lowerer.process(asgn);
+            assert.equal(asgn.operator, '=');
+            assert.equal(asgn.right.$type, 'CallExpression');
+            assert.equal(asgn.right.callee.name, '$binary$+');
+            assert.equal(asgn.left, left);
+            assert.equal(asgn.right.arguments[0], left);
+            assert.equal(asgn.right.arguments[1], right);
+            done();
+        });
+    });
+
     describe ('BinaryExpression', function () {
 
         it ('should convert binary expression to function calls', function (done) {
