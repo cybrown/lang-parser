@@ -86,6 +86,23 @@ describe ('Lowerer', function () {
         });
     });
 
+    describe ('Attributes', function () {
+
+        describe ('Indexing', function () {
+
+            it ('should index the class attributes in current class', function (done) {
+                var attributeNode = nodes.ClassAttribute('attr', null);
+                var classNode = nodes.ClassDeclaration('foo', [attributeNode]);
+                var node = nodes.Program([
+                    nodes.NamespaceDeclaration(['foo'], [classNode])
+                ]);
+                lowerer.process(node);
+                assert.equal(classNode.attributes['attr'], attributeNode);
+                done();
+            });
+        });
+    });
+
     describe ('Method', function () {
 
         describe ('Indexing', function () {
