@@ -1,0 +1,14 @@
+namespace main {
+    class Main {
+        main () {
+            var a :int;
+            a = 42;
+            print(a);
+            do(9, 4);
+        }
+
+        do (a :int, b :int) {
+            print(a - b);
+        }
+    }
+}
