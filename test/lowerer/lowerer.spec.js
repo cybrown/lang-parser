@@ -84,6 +84,19 @@ describe ('Lowerer', function () {
                 done();
             });
         });
+
+        describe ('Interface', function () {
+
+            it ('should convert InterfaceDeclaration to ClassDeclaration with interface flag', function () {
+                var interfaceNode = nodes.InterfaceDeclaration('IFoo', []);
+                var namespaceNode = nodes.NamespaceDeclaration(['ns'], [interfaceNode]);
+                var node = nodes.Program([namespaceNode]);
+                lowerer.process(node);
+                assert.equal(namespaceNode.classes.IFoo.name, interfaceNode.name);
+                assert.equal(namespaceNode.classes.IFoo.members, interfaceNode.members);
+                assert.equal(namespaceNode.classes.IFoo.isInterface, true);
+            });
+        });
     });
 
     describe ('Attributes', function () {
