@@ -137,16 +137,17 @@ describe ('Lowerer', function () {
     describe ('UnaryExpression', function () {
 
         it ('should convert unary expresison to function calls', function (done) {
+            var value = nodes.Literal(42, null);
             var exprNode = nodes.UnaryExpression(
                 '!',
-                nodes.Literal(42, null)
+                value
             );
             var node = nodes.ExpressionStatement(exprNode);
             lowerer.process(node);
             assert.equal(node.expression.$type, 'CallExpression');
-            assert.equal(node.expression.callee.name, '$unary$!');
-            assert.equal(node.expression.arguments.length, 1);
-            assert.equal(node.expression.arguments[0].value, 42);
+            assert.equal(node.expression.callee.property, '$unary$!');
+            assert.equal(node.expression.callee.object, value);
+            assert.equal(node.expression.arguments.length, 0);
             done();
         });
 
