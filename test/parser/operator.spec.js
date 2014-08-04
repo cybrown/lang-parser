@@ -8,7 +8,7 @@ describe ('Operator', function () {
         assert.strictEqual(ast.body[0].expression.$type, 'BinaryExpression');
         assert.strictEqual(ast.body[0].expression.operator, '+');
         assert.strictEqual(ast.body[0].expression.left.$type, 'Literal');
-        assert.strictEqual(ast.body[0].expression.left.value, '1');
+        assert.strictEqual(ast.body[0].expression.left.raw, '1');
         assert.strictEqual(ast.body[0].expression.right.$type, 'Identifier');
         assert.strictEqual(ast.body[0].expression.right.name, 'baz');
     });

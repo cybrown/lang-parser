@@ -28,15 +28,15 @@ describe ('Walker Modification', function () {
                 );
             },
             LiteralLeave: function (node) {
-                return nodes.Literal(node.value + 1, node.type)
+                return nodes.Literal(Number(node.raw) + 1, node.type)
             }
         });
         walker.walk(node);
         assert.equal(node.body[0].$type, 'CallExpression');
         assert.equal(node.body[0].callee.name, '%add');
         assert.equal(node.body[0].arguments[0].$type, 'Literal');
-        assert.equal(node.body[0].arguments[0].value, 3);
+        assert.equal(node.body[0].arguments[0].raw, 3);
         assert.equal(node.body[0].arguments[1].$type, 'Literal');
-        assert.equal(node.body[0].arguments[1].value, 4);
+        assert.equal(node.body[0].arguments[1].raw, 4);
     });
 });

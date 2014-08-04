@@ -162,7 +162,7 @@ describe ('Lowerer', function () {
             assert.equal(node.expression.right.callee.property, '$binary$+');
             assert.equal(node.expression.right.callee.object, value);
             assert.equal(node.expression.right.arguments.length, 1);
-            assert.equal(node.expression.right.arguments[0].value, '1');
+            assert.equal(node.expression.right.arguments[0].raw, '1');
             done();
         });
 
@@ -177,7 +177,7 @@ describe ('Lowerer', function () {
             assert.equal(node.expression.right.callee.property, '$binary$-');
             assert.equal(node.expression.right.callee.object, value);
             assert.equal(node.expression.right.arguments.length, 1);
-            assert.equal(node.expression.right.arguments[0].value, '1');
+            assert.equal(node.expression.right.arguments[0].raw, '1');
             done();
         });
     });
@@ -211,10 +211,10 @@ describe ('Lowerer', function () {
             lowerer.process(node);
             assert.equal(node.expression.$type, 'CallExpression');
             assert.equal(node.expression.callee.$type, 'MemberExpression');
-            assert.equal(node.expression.callee.object.value, 42);
+            assert.equal(node.expression.callee.object.raw, 42);
             assert.equal(node.expression.callee.property, '$binary$-');
             assert.equal(node.expression.arguments.length, 1);
-            assert.equal(node.expression.arguments[0].value, 10);
+            assert.equal(node.expression.arguments[0].raw, 10);
             done();
         });
 

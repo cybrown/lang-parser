@@ -20,7 +20,7 @@ describe ('Bracket', function () {
         assert.strictEqual(ast.body[0].expression.$type, 'BracketExpression')
         assert.strictEqual(ast.body[0].expression.items.length, 1);
         assert.strictEqual(ast.body[0].expression.items[0].$type, 'Literal');
-        assert.strictEqual(ast.body[0].expression.items[0].value, '1');
+        assert.strictEqual(ast.body[0].expression.items[0].raw, '1');
     });
 
     it ('should parse an list with 3 elements', function () {
@@ -28,9 +28,9 @@ describe ('Bracket', function () {
         assert.strictEqual(ast.body[0].expression.$type, 'BracketExpression')
         assert.strictEqual(ast.body[0].expression.items.length, 3);
         assert.strictEqual(ast.body[0].expression.items[0].$type, 'Literal');
-        assert.strictEqual(ast.body[0].expression.items[0].value, '1');
+        assert.strictEqual(ast.body[0].expression.items[0].raw, '1');
         assert.strictEqual(ast.body[0].expression.items[1].$type, 'Literal');
-        assert.strictEqual(ast.body[0].expression.items[1].value, '2');
+        assert.strictEqual(ast.body[0].expression.items[1].raw, '2');
         assert.strictEqual(ast.body[0].expression.items[2].$type, 'Identifier');
         assert.strictEqual(ast.body[0].expression.items[2].name, 'foo');
     });
@@ -41,11 +41,11 @@ describe ('Bracket', function () {
         assert.strictEqual(ast.body[0].expression.items.length, 3);
         assert.strictEqual(ast.body[0].expression.items[1].$type, 'BracketExpression');
         assert.strictEqual(ast.body[0].expression.items[0].$type, 'Literal');
-        assert.strictEqual(ast.body[0].expression.items[0].value, '1');
+        assert.strictEqual(ast.body[0].expression.items[0].raw, '1');
         assert.strictEqual(ast.body[0].expression.items[1].items.length, 2);
-        assert.strictEqual(ast.body[0].expression.items[1].items[0].value, '4');
-        assert.strictEqual(ast.body[0].expression.items[1].items[1].value, '5');
+        assert.strictEqual(ast.body[0].expression.items[1].items[0].raw, '4');
+        assert.strictEqual(ast.body[0].expression.items[1].items[1].raw, '5');
         assert.strictEqual(ast.body[0].expression.items[2].$type, 'Literal');
-        assert.strictEqual(ast.body[0].expression.items[2].value, '3');
+        assert.strictEqual(ast.body[0].expression.items[2].raw, '3');
     });
 });

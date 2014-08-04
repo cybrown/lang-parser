@@ -15,7 +15,7 @@ describe ('Walker Values', function () {
         walker.setDelegate({
             LiteralEnter:  function (node) {
                 try {
-                    assert.equal(node.value, 42);
+                    assert.equal(node.raw, 42);
                     done();
                 } catch (err) {
                     done(err);

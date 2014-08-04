@@ -127,7 +127,7 @@ describe ('Walker Statements', function () {
             LiteralEnter: function (node) {
                 try {
                     assert.equal(counter, 1);
-                    assert.equal(node.value, 2);
+                    assert.equal(node.raw, 2);
                     counter++;
                 } catch (err) {
                     done(err);
@@ -162,7 +162,7 @@ describe ('Walker Statements', function () {
             LiteralEnter: function (node) {
                 try {
                     assert.equal(counter, 1);
-                    assert.equal(node.value, 2);
+                    assert.equal(node.raw, 2);
                     counter++;
                 } catch (err) {
                     done(err);

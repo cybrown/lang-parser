@@ -35,7 +35,7 @@ describe ('Walker Misc', function () {
             LiteralEnter: function (node) {
                 try {
                     assert.equal(counter, 2);
-                    assert.equal(node.value, 42);
+                    assert.equal(node.raw, 42);
                     counter++;
                 } catch (err) {
                     done(err);

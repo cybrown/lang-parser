@@ -62,10 +62,10 @@ describe ('Walker Expressions', function () {
             LiteralEnter: function (node) {
                 try {
                     if (counter == 1) {
-                        assert.equal(node.value, 1);
+                        assert.equal(node.raw, 1);
                         assert.equal(counter, 1);
                     } else if (counter === 2) {
-                        assert.equal(node.value, 2);
+                        assert.equal(node.raw, 2);
                         assert.equal(counter, 2);
                     } else {
                         throw new Error('Illegal counter');
@@ -116,7 +116,7 @@ describe ('Walker Expressions', function () {
             },
             LiteralEnter: function (node) {
                 try {
-                    assert.equal(node.value, 2);
+                    assert.equal(node.raw, 2);
                     assert.equal(counter, 2);
                     counter++;
                 } catch (err) {
@@ -173,7 +173,7 @@ describe ('Walker Expressions', function () {
             LiteralLeave: function (node) {
                 try {
                     assert.equal(counter, 1);
-                    assert.equal(node.value, 1);
+                    assert.equal(node.raw, 1);
                     counter++;
                 } catch (err) {
                     done(err);
@@ -209,7 +209,7 @@ describe ('Walker Expressions', function () {
             LiteralEnter: function (node) {
                 try {
                     assert.equal(counter, 1);
-                    assert.equal(node.value, 1);
+                    assert.equal(node.raw, 1);
                     counter++;
                 } catch (err) {
                     done(err);
@@ -256,7 +256,7 @@ describe ('Walker Expressions', function () {
                 if (counter === 1) {
                     try {
                         assert.equal(counter, 1);
-                        assert.equal(node.value, 1);
+                        assert.equal(node.raw, 1);
                         counter++;
                     } catch (err) {
                         done(err);
@@ -264,7 +264,7 @@ describe ('Walker Expressions', function () {
                 } else if (counter === 3) {
                     try {
                         assert.equal(counter, 3);
-                        assert.equal(node.value, 42);
+                        assert.equal(node.raw, 42);
                         counter++;
                     } catch (err) {
                         done(err);
@@ -411,7 +411,7 @@ it ('should walk SubscriptExpression', function (done) {
         LiteralEnter: function (node) {
             try {
                 assert.equal(counter, 2);
-                assert.equal(node.value, 314);
+                assert.equal(node.raw, 314);
                 counter++;
             } catch (err) {
                 done(err);

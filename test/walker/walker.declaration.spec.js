@@ -30,7 +30,7 @@ describe ('Walker Declarations', function () {
             LiteralEnter: function (node) {
                 try {
                     assert.equal(counter, 1);
-                    assert.equal(node.value, 72);
+                    assert.equal(node.raw, 72);
                     counter++;
                 } catch (err) {
                     done(err);
@@ -67,7 +67,7 @@ describe ('Walker Declarations', function () {
             LiteralEnter: function (node) {
                 try {
                     assert.equal(counter, 1);
-                    assert.equal(node.value, 31);
+                    assert.equal(node.raw, 31);
                     counter++;
                 } catch (err) {
                     done(err);

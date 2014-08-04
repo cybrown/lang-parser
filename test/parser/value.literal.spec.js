@@ -11,7 +11,7 @@ describe ('Literal', function () {
         assert.strictEqual(ast.body[0].expression.type.size, 32);
         assert.strictEqual(ast.body[0].expression.type.float, false);
         assert.strictEqual(ast.body[0].expression.type.unsigned, false);
-        assert.strictEqual(ast.body[0].expression.value, '1');
+        assert.strictEqual(ast.body[0].expression.raw, '1');
     });
 
     it ('should parse a double', function () {
@@ -21,7 +21,7 @@ describe ('Literal', function () {
         assert.strictEqual(ast.body[0].expression.type.size, 64);
         assert.strictEqual(ast.body[0].expression.type.float, true);
         assert.strictEqual(ast.body[0].expression.type.unsigned, false);
-        assert.strictEqual(ast.body[0].expression.value, '3.14');
+        assert.strictEqual(ast.body[0].expression.raw, '3.14');
     });
 
     it ('should parse a double', function () {
@@ -31,7 +31,7 @@ describe ('Literal', function () {
         assert.strictEqual(ast.body[0].expression.type.size, 64);
         assert.strictEqual(ast.body[0].expression.type.float, true);
         assert.strictEqual(ast.body[0].expression.type.unsigned, false);
-        assert.strictEqual(ast.body[0].expression.value, '.14');
+        assert.strictEqual(ast.body[0].expression.raw, '.14');
     });
 
     it ('should parse a double', function () {
@@ -41,6 +41,6 @@ describe ('Literal', function () {
         assert.strictEqual(ast.body[0].expression.type.size, 64);
         assert.strictEqual(ast.body[0].expression.type.float, true);
         assert.strictEqual(ast.body[0].expression.type.unsigned, false);
-        assert.strictEqual(ast.body[0].expression.value, '3.');
+        assert.strictEqual(ast.body[0].expression.raw, '3.');
     });
 });
