@@ -15,3 +15,21 @@ namespace main {
         }
     }
 }
+
+namespace lang
+{
+    class int
+    {
+        __eq__ (other :int) {
+            return int32eq(this, other);
+        }
+
+        __sub__ (other :int) {
+            return int32sub(this, other);
+        }
+
+        __mul__ (other :int) {
+            return int32mul(this, other);
+        }
+    }
+}

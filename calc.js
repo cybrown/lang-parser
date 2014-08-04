@@ -16,40 +16,60 @@ lowerer.process(program);
 var runner = new Walker();
 
 var builtins = {
-    '$binary$+': function (stack) {
-        var b = stack[stack.length - 1];
+    'int32add': function (stack) {
+        var type = stack[stack.length - 1].type;
+        var b = stack[stack.length - 1].value;
         stack.pop();
-        var a = stack[stack.length - 1];
+        var a = stack[stack.length - 1].value;
         stack.pop();
-        stack.push(a + b);
+        stack.push({
+            value: a + b,
+            type: type
+        })
     },
-    '$binary$-': function (stack) {
-        var b = stack[stack.length - 1];
+    'int32sub': function (stack) {
+        var type = stack[stack.length - 1].type;
+        var b = stack[stack.length - 1].value;
         stack.pop();
-        var a = stack[stack.length - 1];
+        var a = stack[stack.length - 1].value;
         stack.pop();
-        stack.push(a - b);
+        stack.push({
+            value: a - b,
+            type: type
+        })
     },
-    '$binary$*': function (stack) {
-        var b = stack[stack.length - 1];
+    'int32mul': function (stack) {
+        var type = stack[stack.length - 1].type;
+        var b = stack[stack.length - 1].value;
         stack.pop();
-        var a = stack[stack.length - 1];
+        var a = stack[stack.length - 1].value;
         stack.pop();
-        stack.push(a * b);
+        stack.push({
+            value: a * b,
+            type: type
+        })
     },
-    '$binary$==': function (stack) {
-        var b = stack[stack.length - 1];
+    'int32eq': function (stack) {
+        var type = stack[stack.length - 1].type;
+        var b = stack[stack.length - 1].value;
         stack.pop();
-        var a = stack[stack.length - 1];
+        var a = stack[stack.length - 1].value;
         stack.pop();
-        stack.push(a === b);
+        stack.push({
+            value: a === b,
+            type: type
+        });
     },
-    '$binary$!=': function (stack) {
-        var b = stack[stack.length - 1];
+    'int32ne': function (stack) {
+        var type = stack[stack.length - 1].type;
+        var b = stack[stack.length - 1].value;
         stack.pop();
-        var a = stack[stack.length - 1];
+        var a = stack[stack.length - 1].value;
         stack.pop();
-        stack.push(a !== b);
+        stack.push({
+            value: a !== b,
+            type: type
+        });
     },
     print: function (stack) {
         console.log(stack[stack.length - 1]);
@@ -124,7 +144,10 @@ runner.setDelegate({
         }
     },
     LiteralLeave: function (node) {
-        stack.push(Number(node.value));
+        stack.push({
+            value: Number(node.raw),
+            type: typeInt
+        })
     },
     IdentifierLeave: function (node) {
         if (doLoad) {
@@ -175,7 +198,13 @@ runner.setDelegate({
         var obj = stack[stack.length - 1];
         stack.pop();
         if (node.doLoad !== false) {
-            stack.push(obj[node.property]);
+            if (obj.hasOwnProperty(node.property)) {
+                stack.push(obj[node.property]);
+            } else if (obj.type.methods.hasOwnProperty(node.property)) {
+                stack.push(obj.type.methods[node.property]);
+            } else {
+                throw new Error('Member ' + node.property + ' not found.');
+            }
         } else {
             stack.push([obj, node.property]);
         }
@@ -191,7 +220,7 @@ runner.setDelegate({
         }
     },
     ConditionalExpressionLeave: function (node) {
-        var test = stack[stack.length - 1];
+        var test = stack[stack.length - 1].value;
         stack.pop();
         if (test) {
             runner.walk(node._consequent);
@@ -266,6 +295,11 @@ var instantiate = function (cls) {
 
 var firstObject = instantiate(program.namespaces['main'].classes['Main']);
 
+var typeInt = program.namespaces['lang'].classes['int'];
+
 stack.push(firstObject);
-stack.push(10);
+stack.push({
+    value: 10,
+    type: typeInt
+});
 callMethod(program.namespaces['main'].classes['Main'].methods.main);
