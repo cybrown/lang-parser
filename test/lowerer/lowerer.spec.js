@@ -159,7 +159,7 @@ describe ('Lowerer', function () {
             assert.equal(node.expression.$type, 'AssignmentExpression');
             assert.equal(node.expression.left, value);
             assert.equal(node.expression.right.$type, 'CallExpression');
-            assert.equal(node.expression.right.callee.property, '$binary$+');
+            assert.equal(node.expression.right.callee.property, '__add__');
             assert.equal(node.expression.right.callee.object, value);
             assert.equal(node.expression.right.arguments.length, 1);
             assert.equal(node.expression.right.arguments[0].raw, '1');
@@ -174,7 +174,7 @@ describe ('Lowerer', function () {
             assert.equal(node.expression.$type, 'AssignmentExpression');
             assert.equal(node.expression.left, value);
             assert.equal(node.expression.right.$type, 'CallExpression');
-            assert.equal(node.expression.right.callee.property, '$binary$-');
+            assert.equal(node.expression.right.callee.property, '__sub__');
             assert.equal(node.expression.right.callee.object, value);
             assert.equal(node.expression.right.arguments.length, 1);
             assert.equal(node.expression.right.arguments[0].raw, '1');
@@ -191,7 +191,7 @@ describe ('Lowerer', function () {
             lowerer.process(asgn);
             assert.equal(asgn.operator, '=');
             assert.equal(asgn.right.$type, 'CallExpression');
-            assert.equal(asgn.right.callee.property, '$binary$+');
+            assert.equal(asgn.right.callee.property, '__add__');
             assert.equal(asgn.left, left);
             assert.equal(asgn.right.callee.object, left);
             assert.equal(asgn.right.arguments[0], right);
@@ -212,7 +212,7 @@ describe ('Lowerer', function () {
             assert.equal(node.expression.$type, 'CallExpression');
             assert.equal(node.expression.callee.$type, 'MemberExpression');
             assert.equal(node.expression.callee.object.raw, 42);
-            assert.equal(node.expression.callee.property, '$binary$-');
+            assert.equal(node.expression.callee.property, '__sub__');
             assert.equal(node.expression.arguments.length, 1);
             assert.equal(node.expression.arguments[0].raw, 10);
             done();
