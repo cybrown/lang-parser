@@ -212,6 +212,25 @@ describe ('Lowerer', function () {
         });
     });
 
+    describe ('SubscriptExpression', function () {
+        
+        it ('should convert SubscriptExpression to CallExpression', function (done) {
+            var exprNode = nodes.SubscriptExpression(
+                nodes.Identifier('test'),
+                nodes.Literal(10)
+            );
+            var node = nodes.ExpressionStatement(exprNode);
+            lowerer.process(node);
+            assert.equal(node.expression.$type, 'CallExpression');
+            assert.equal(node.expression.callee.$type, 'MemberExpression');
+            assert.equal(node.expression.callee.object.name, 'test');
+            assert.equal(node.expression.callee.property, '__index__');
+            assert.equal(node.expression.arguments.length, 1);
+            assert.equal(node.expression.arguments[0].raw, 10);
+            done();
+        });
+    });
+
     describe ('BinaryExpression', function () {
 
         it ('should convert binary expression to function calls', function (done) {
