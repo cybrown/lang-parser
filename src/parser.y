@@ -14,6 +14,8 @@
 "try"                 return 'TRY'
 "var"                 return 'VAR'
 "namespace"           return 'NAMESPACE'
+"true"                return 'LITERAL_BOOL'
+"false"               return 'LITERAL_BOOL'
 
 /* Values */
 [0-9]+"."[0-9]*       return 'LITERAL_DOUBLE'
@@ -483,6 +485,12 @@ PrimaryExpression
             $$ = yy.node.Literal(
                 yytext,
                 yy.types.PrimitiveType(64, true, false)
+            );
+        }
+    | LITERAL_BOOL
+        {
+            $$ = yy.node.Literal(
+                yytext
             );
         }
     | IDENTIFIER

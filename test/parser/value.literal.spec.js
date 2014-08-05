@@ -4,6 +4,18 @@ var types = require('../../lib/types');
 
 describe ('Literal', function () {
 
+    it ('should parse true', function () {
+        var ast = parser.parse('true;');
+        assert.strictEqual(ast.body[0].expression.$type, 'Literal');
+        assert.strictEqual(ast.body[0].expression.raw, 'true');
+    });
+
+    it ('should parse false', function () {
+        var ast = parser.parse('false;');
+        assert.strictEqual(ast.body[0].expression.$type, 'Literal');
+        assert.strictEqual(ast.body[0].expression.raw, 'false');
+    });
+
     it ('should parse a signed integer', function () {
         var ast = parser.parse('1;');
         assert.strictEqual(ast.body[0].expression.$type, 'Literal');
