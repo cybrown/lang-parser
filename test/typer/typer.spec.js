@@ -13,177 +13,181 @@ describe ('Typer', function () {
 
     describe('Literal', function () {
 
-        it ('should throw Error if type is null', function () {
-            throw new Error('Not yet implemented');
+        xit ('should throw Error if type is null', function () {
+
+        });
+
+        xit ('should get the type of a primitive int', function () {
+
         });
     });
 
     describe('Identifier', function () {
 
-        it ('should get type from identifier table', function () {
-            throw new Error('Not yet implemented');
+        xit ('should get type from identifier table', function () {
+
         });
     });
 
     describe('AssignmentExpression', function () {
 
-        it ('should check type of both sides', function () {
-            throw new Error('Not yet implemented');
+        xit ('should check type of both sides', function () {
+
         });
 
-        it ('should return the type of both sides', function () {
-            throw new Error('Not yet implemented');
+        xit ('should return the type of both sides', function () {
+
         });
     });
 
     describe('CallExpression', function () {
 
-        it ('should put the type from the returnType of the callee', function () {
-            throw new Error('Not yet implemented');
+        xit ('should put the type from the returnType of the callee', function () {
+
         });
     });
 
     describe('BracketExpression', function () {
 
-        it ('should set the type of the expression with the most common type of included elements', function () {
-            throw new Error('Not yet implemented');
+        xit ('should set the type of the expression with the most common type of included elements', function () {
+
         });
     });
 
     describe('ConditionalExpression', function () {
 
-        it ('should check the type of test', function () {
-            throw new Error('Not yet implemented');
+        xit ('should check the type of test', function () {
+
         });
 
-        it ('should check the type of consequent and alternate', function () {
-            throw new Error('Not yet implemented');
+        xit ('should check the type of consequent and alternate', function () {
+
         });
 
-        it ('should return a compatible type between consequent and alternate', function () {
-            throw new Error('Not yet implemented');
+        xit ('should return a compatible type between consequent and alternate', function () {
+
         });
     });
 
     describe('LambdaExpression', function () {
 
-        it ('should infer type of arguments from current argument type if in a function call', function () {
-            throw new Error('Not yet implemented');
+        xit ('should infer type of arguments from current argument type if in a function call', function () {
+
         });
 
-        it ('should set the type of expression from return type and arguments type', function () {
-            throw new Error('Not yet implemented');
+        xit ('should set the type of expression from return type and arguments type', function () {
+
         });
     });
 
     describe('MemberExpression', function () {
         
-        it ('should check if object value is an object, and has such a property', function () {
-            throw new Error('Not yet implemented');
+        xit ('should check if object value is an object, and has such a property', function () {
+
         });
     });
 
     describe('ExpressionStatement', function () {
 
-        it ('should apply the type of the expression to the statement', function () {
-            throw new Error('Not yet implemented');
+        xit ('should apply the type of the expression to the statement', function () {
+
         });
     });
 
     describe('ReturnStatement', function () {
 
-        it ('if current function does not have a returnType, it should infer it', function () {
-            throw new Error('Not yet implemented');
+        xit ('if current function does not have a returnType, it should infer it', function () {
+
         });
 
-        it ('should check if it returns a compatible type with current function', function () {
-            throw new Error('Not yet implemented');
+        xit ('should check if it returns a compatible type with current function', function () {
+
         });
     });
 
     describe('ThrowStatement', function () {
 
-        it ('should check if thrown exception is a throwable', function () {
-            throw new Error('Not yet implemented');
+        xit ('should check if thrown exception is a throwable', function () {
+
         });
     });
 
     describe('TryStatement', function () {
 
-        it ('should check if types in catch clause might not be ignored', function () {
-            throw new Error('Not yet implemented');
+        xit ('should check if types in catch clause might not be ignored', function () {
+
         });
     });
 
     describe('CatchClause', function () {
         
-        it ('should check if the type is throwable', function () {
-            throw new Error('Not yet implemented');
+        xit ('should check if the type is throwable', function () {
+
         });
     });
 
     describe('VariableDeclaration', function () {
 
-        it ('should add type of symbol from the init expression', function () {
-            throw new Error('Not yet implemented');
+        xit ('should add type of symbol from the init expression', function () {
+
         });
 
-        it ('should check if it has a type if the init expression is null', function () {
-            throw new Error('Not yet implemented');
+        xit ('should check if it has a type if the init expression is null', function () {
+
         });
 
-        it ('should add the type to the identifier table', function  () {
-            throw new Error('Not yet implemented');
+        xit ('should add the type to the identifier table', function  () {
+
         });
     });
 
     describe('ConstantDeclaration', function () {
 
-        it ('should add type of symbol from the init expression', function () {
-            throw new Error('Not yet implemented');
+        xit ('should add type of symbol from the init expression', function () {
+
         });
 
-        it ('should add the type to the identifier table', function  () {
-            throw new Error('Not yet implemented');
+        xit ('should add the type to the identifier table', function  () {
+
         });
     });
 
     describe('NamespaceDeclaration', function () {
 
-        it ('should check if namespace has a namespace type', function () {
-            throw new Error('Not yet implemented');
+        xit ('should check if namespace has a namespace type', function () {
+
         });
     });
 
     describe('ClassDeclaration', function () {
 
-        it ('should check if the class has a class type', function () {
-            throw new Error('Not yet implemented');
+        xit ('should check if the class has a class type', function () {
+
         });
     });
 
     describe('ClassAttribute', function () {
 
-        it ('should infer type from initial value if not null', function () {
-            throw new Error('Not yet implemented');
+        xit ('should infer type from initial value if not null', function () {
+
         });
 
-        it ('should check if the attribute has a correct type', function () {
-            throw new Error('Not yet implemented');
+        xit ('should check if the attribute has a correct type', function () {
+
         });
     });
 
     describe('ClassMethod', function () {
 
-        it ('should check if the method has a correct type', function () {
-            throw new Error('Not yet implemented');
+        xit ('should check if the method has a correct type', function () {
+
         });
     });
 
     describe('MethodParameter', function () {
 
-        it ('should check if parameters are correct', function () {
-            throw new Error('Not yet implemented');
+        xit ('should check if parameters are correct', function () {
+
         });
     });
 
