@@ -1,6 +1,5 @@
 var Walker = require('../../lib/walker');
 var nodes = require('../../lib/nodes');
-var types = require('../../lib/types');
 var assert = require('assert');
 
 describe ('Walker Declarations', function () {
@@ -135,12 +134,11 @@ describe ('Walker Declarations', function () {
 
     it ('should walk MethodParameter', function (done) {
         var counter = 0;
-        var node = nodes.MethodParameter('x', types.PrimitiveType(32, false, false));
+        var node = nodes.MethodParameter('x');
         walker.setDelegate({
             MethodParameterEnter: function (node) {
                 try {
                     assert.equal(counter, 0);
-                    assert.equal(node.type.$type, 'PrimitiveType');
                     counter++;
                 } catch (err) {
                     done(err);
@@ -162,8 +160,8 @@ describe ('Walker Declarations', function () {
         var counter = 0;
         var node = nodes.ClassMethod(
             'getValue',
-            types.PrimitiveType(32, false, false),
-            [nodes.MethodParameter('x', types.PrimitiveType(32, false, false))],
+            null,
+            [nodes.MethodParameter('x', null)],
             nodes.ExpressionStatement(nodes.BinaryExpression('+', null, null))
         );
         walker.setDelegate({
@@ -222,12 +220,11 @@ describe ('Walker Declarations', function () {
 
     it ('should walk ClassAttribute', function (done) {
         var counter = 0;
-        var node = nodes.ClassAttribute('foo', types.PrimitiveType(32, false, false));
+        var node = nodes.ClassAttribute('foo', null);
         walker.setDelegate({
             ClassAttributeEnter: function (node) {
                 try {
                     assert.equal(counter, 0);
-                    assert.equal(node.type.$type, 'PrimitiveType');
                     counter++;
                 } catch (err) {
                     done(err);
@@ -248,11 +245,11 @@ describe ('Walker Declarations', function () {
     it ('should walk ClassDeclaration', function (done) {
         var counter = 0;
         var node = nodes.ClassDeclaration('Foo', [
-            nodes.ClassAttribute('value', types.PrimitiveType(32, false, false)),
+            nodes.ClassAttribute('value', null),
             nodes.ClassMethod(
                 'getValue',
-                types.PrimitiveType(32, false, false),
-                [nodes.MethodParameter('x', types.PrimitiveType(32, false, false))],
+                null,
+                [nodes.MethodParameter('x', null)],
                 nodes.ExpressionStatement(nodes.BinaryExpression('+', null, null))
             )
         ]);
@@ -268,7 +265,6 @@ describe ('Walker Declarations', function () {
             ClassAttributeEnter: function (node) {
                 try {
                     assert.equal(counter, 1);
-                    assert.equal(node.type.$type, 'PrimitiveType');
                     counter++;
                 } catch (err) {
                     done(err);

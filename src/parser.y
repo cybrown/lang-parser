@@ -476,15 +476,13 @@ PrimaryExpression
     : LITERAL_SIGNED_INTEGER
         {
             $$ = yy.node.Literal(
-                yytext,
-                yy.types.PrimitiveType(32, false, false)
+                yytext
             );
         }
     | LITERAL_DOUBLE
         {
             $$ = yy.node.Literal(
-                yytext,
-                yy.types.PrimitiveType(64, true, false)
+                yytext
             );
         }
     | LITERAL_BOOL

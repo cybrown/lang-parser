@@ -1,6 +1,5 @@
 var Walker = require('../../lib/walker');
 var nodes = require('../../lib/nodes');
-var types = require('../../lib/types');
 var assert = require('assert');
 
 describe ('Walker Modification', function () {
@@ -16,8 +15,8 @@ describe ('Walker Modification', function () {
         var node = nodes.Program(
             [nodes.BinaryExpression(
                 '+',
-                nodes.Literal(2, types.PrimitiveType(32, false, false)),
-                nodes.Literal(3, types.PrimitiveType(32, false, false))
+                nodes.Literal(2),
+                nodes.Literal(3)
             )]
         );
         walker.setDelegate({
