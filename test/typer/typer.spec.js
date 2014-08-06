@@ -201,7 +201,7 @@ describe ('Typer', function () {
 
         });
 
-        xit ('should object has the property', function () {
+        xit ('should check if object has the property', function () {
 
         });
     });
