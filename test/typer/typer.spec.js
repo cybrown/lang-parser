@@ -16,8 +16,8 @@ describe ('Typer', function () {
     var float64Class = nodes.ClassDeclaration('long', []);
     var stringClass = nodes.ClassDeclaration('string', []);
 
-    var baseClass = node.ClassDeclaration('Base', []);
-    var subClass = node.ClassDeclaration('Sub', []);
+    var baseClass = nodes.ClassDeclaration('Base', []);
+    var subClass = nodes.ClassDeclaration('Sub', []);
 
     beforeEach(function () {
         typer = new Typer(new Walker());
