@@ -101,8 +101,22 @@ describe ('Typer', function () {
 
     describe('Identifier', function () {
 
-        xit ('should get type from identifier table', function () {
-
+        it ('should get type from identifier table', function () {
+            var varUse = nodes.Identifier('x');
+            var node = nodes.Program([
+                nodes.NamespaceDeclaration(['foo'], [
+                    nodes.ClassDeclaration('Foo', [
+                        nodes.ClassMethod('m', null, [],
+                            nodes.BlockStatement([
+                                nodes.VariableDeclaration('x', int32Class),
+                                nodes.ExpressionStatement(varUse)
+                            ])
+                        )
+                    ])
+                ])
+            ]);
+            typer.process(node);
+            assert.equal(varUse.type, int32Class);
         });
     });
 
@@ -124,6 +138,7 @@ describe ('Typer', function () {
         it ('should set the type of the expression', function () {
             var nodeIdentifier = nodes.Identifier('foo');
             nodeIdentifier.type = int32Class;
+            typer.defineVar('foo', int32Class);
             var node = nodes.AssignmentExpression(
                 '=',
                 nodeIdentifier,
