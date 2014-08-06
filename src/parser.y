@@ -284,7 +284,22 @@ MethodParameter
 
 Type
     : IDENTIFIER
-        {$$ = yy.node.Identifier($1);}
+        {$$ = yy.node.NamedType($1);}
+    | Type '[' ']'
+    | Type '<' TypeList '>'
+    | '{' TypeList ARROW Type '}'
+        {$$ = yy.node.FunctionType($4, $2);}
+    | '(' TypeList ')'
+    ;
+
+TypeList
+    : Type
+        {$$ = [$1];}
+    | TypeList ',' Type
+        {
+            $1.push($3);
+            $$ = $1;
+        }
     ;
 
 /* END Subdeclarations */
