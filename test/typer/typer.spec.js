@@ -7,7 +7,7 @@ describe ('Typer', function () {
 
     var typer;
     var boolClass;
-    var int32Class
+    var int32Class;
     var int64Class;
     var uint32Class;
     var uint64Class;
@@ -41,6 +41,17 @@ describe ('Typer', function () {
         baseClass = nodes.ClassDeclaration('Base', []);
         subClass = nodes.ClassDeclaration('Sub', []);
     });
+
+    var helperClass = function (nsName, clsName, mName, mContent) {
+        var mth = nodes.ClassMethod(mName, null, [], mContent);
+        var cls = nodes.ClassDeclaration(clsName, [mth]);
+        var ns = nodes.NamespaceDeclaration([nsName], [cls]);
+        return {
+            p: nodes.Program([ns]),
+            c: cls,
+            m: mth
+        };
+    };
 
     describe('Literal', function () {
 
@@ -103,18 +114,10 @@ describe ('Typer', function () {
 
         it ('should get type from identifier table', function () {
             var varUse = nodes.Identifier('x');
-            var node = nodes.Program([
-                nodes.NamespaceDeclaration(['foo'], [
-                    nodes.ClassDeclaration('Foo', [
-                        nodes.ClassMethod('m', null, [],
-                            nodes.BlockStatement([
-                                nodes.VariableDeclaration('x', int32Class),
-                                nodes.ExpressionStatement(varUse)
-                            ])
-                        )
-                    ])
-                ])
-            ]);
+            var node = helperClass('foo', 'Foo', 'm', nodes.BlockStatement([
+                nodes.VariableDeclaration('x', int32Class),
+                nodes.ExpressionStatement(varUse)
+            ])).p;
             typer.process(node);
             assert.equal(varUse.type, int32Class);
         });
