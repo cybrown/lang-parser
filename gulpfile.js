@@ -32,7 +32,14 @@ gulp.task('mocha.lowerer', function () {
         .pipe(mocha());
 });
 
-gulp.task('mocha', ['mocha.parser', 'mocha.walker', 'mocha.lowerer']);
+gulp.task('mocha.typer', function () {
+    return gulp.src('test/typer/*', {read: false})
+        .pipe(mocha());
+});
+
+gulp.task('mocha', function () {
+    runSequence('mocha.parser', 'mocha.walker', 'mocha.lowerer');
+});
 
 gulp.task('test', function () {
     return runSequence('mocha');
