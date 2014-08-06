@@ -149,7 +149,7 @@ describe ('Lowerer', function () {
 
     describe ('UnaryExpression', function () {
 
-        it ('should convert unary expresison to function calls', function (done) {
+        it ('should convert unary expresison to function calls (!)', function (done) {
             var value = nodes.Literal(42, null);
             var exprNode = nodes.UnaryExpression(
                 '!',
@@ -158,10 +158,40 @@ describe ('Lowerer', function () {
             var node = nodes.ExpressionStatement(exprNode);
             lowerer.process(node);
             assert.equal(node.expression.$type, 'CallExpression');
-            assert.equal(node.expression.callee.property, '$unary$!');
+            assert.equal(node.expression.callee.property, '__not__');
             assert.equal(node.expression.callee.object, value);
             assert.equal(node.expression.arguments.length, 0);
             done();
+        });
+
+        it ('should convert unary expresison to function calls (-)', function () {
+            var exprNode = nodes.UnaryExpression(
+                '-',
+                nodes.Literal(42, null)
+            );
+            var node = nodes.ExpressionStatement(exprNode);
+            lowerer.process(node);
+            assert.equal(node.expression.callee.property, '__neg__');
+        });
+
+        it ('should convert unary expresison to function calls (+)', function () {
+            var exprNode = nodes.UnaryExpression(
+                '+',
+                nodes.Literal(42, null)
+            );
+            var node = nodes.ExpressionStatement(exprNode);
+            lowerer.process(node);
+            assert.equal(node.expression.callee.property, '__pos__');
+        });
+
+        it ('should convert unary expresison to function calls (~)', function () {
+            var exprNode = nodes.UnaryExpression(
+                '~',
+                nodes.Literal(42, null)
+            );
+            var node = nodes.ExpressionStatement(exprNode);
+            lowerer.process(node);
+            assert.equal(node.expression.callee.property, '__inv__');
         });
 
         it ('should convert prefix ++ to assignment expression and return value', function (done) {
