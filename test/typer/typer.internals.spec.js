@@ -7,7 +7,7 @@ describe ('Typer internals', function () {
 
     var typer;
     var boolClass;
-	var int32Class
+	var int32Class;
 	var int64Class;
 	var uint32Class;
 	var uint64Class;

@@ -6,6 +6,7 @@ describe ('Class Method', function () {
     it ('should parse a method without params', function () {
         var ast = parser.parse('class Foo { getAge() {1;} }');
         assert.strictEqual(ast.body[0].$type, 'ClassDeclaration');
+        assert.strictEqual(ast.body[0].isClass, true);
         assert.strictEqual(ast.body[0].name, 'Foo');
         assert.strictEqual(ast.body[0].members.length, 1);
         assert.strictEqual(ast.body[0].members[0].$type, 'ClassMethod');
