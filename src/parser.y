@@ -14,6 +14,8 @@
 "try"                 return 'TRY'
 "var"                 return 'VAR'
 "namespace"           return 'NAMESPACE'
+"extends"             return 'EXTENDS'
+"implements"          return 'IMPLEMENTS'
 "true"                return 'LITERAL_BOOL'
 "false"               return 'LITERAL_BOOL'
 
@@ -211,6 +213,34 @@ ClassDeclaration
         {$$ = yy.node.ClassDeclaration($2, []);}
     | CLASS IDENTIFIER '{' ClassMemberList '}'
         {$$ = yy.node.ClassDeclaration($2, $4);}
+    | CLASS IDENTIFIER TypeInheritance '{' '}'
+        {$$ = yy.node.ClassDeclaration($2, [], $3.extends, $3.implements);}
+    | CLASS IDENTIFIER TypeInheritance '{' ClassMemberList '}'
+        {$$ = yy.node.ClassDeclaration($2, $5);}
+    ;
+
+TypeInheritance
+    : EXTENDS Type
+        {
+            $$ = {
+                extends: $2,
+                implements: []
+            };
+        }
+    | IMPLEMENTS TypeList
+        {
+            $$ = {
+                extends: null,
+                implements: $2
+            };
+        }
+    | EXTENDS Type IMPLEMENTS TypeList
+        {
+            $$ = {
+                extends: $2,
+                implements: $4
+            }
+        }
     ;
 
 InterfaceDeclaration

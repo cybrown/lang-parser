@@ -45,4 +45,42 @@ describe ('Class', function () {
         assert.strictEqual(ast.body[0].members[1].name, 'getName');
         assert.strictEqual(ast.body[0].members[1].params.length, 0);
     });
+
+    it ('should parse extends qualifier', function () {
+        var ast = parser.parse('class Foo extends Baz { }');
+        assert.strictEqual(ast.body[0].$type, 'ClassDeclaration');
+        assert.strictEqual(ast.body[0].name, 'Foo');
+        assert.strictEqual(ast.body[0].members.length, 0);
+        assert.strictEqual(ast.body[0].extends.name, 'Baz');
+    });
+
+    it ('should parse implements qualifier', function () {
+        var ast = parser.parse('class Foo implements IBaz { }');
+        assert.strictEqual(ast.body[0].$type, 'ClassDeclaration');
+        assert.strictEqual(ast.body[0].name, 'Foo');
+        assert.strictEqual(ast.body[0].members.length, 0);
+        assert.strictEqual(ast.body[0].implements.length, 1);
+        assert.strictEqual(ast.body[0].implements[0].name, 'IBaz');
+    });
+
+    it ('should parse implements qualifier with multiple types', function () {
+        var ast = parser.parse('class Foo implements IBaz, IFoo { }');
+        assert.strictEqual(ast.body[0].$type, 'ClassDeclaration');
+        assert.strictEqual(ast.body[0].name, 'Foo');
+        assert.strictEqual(ast.body[0].members.length, 0);
+        assert.strictEqual(ast.body[0].implements.length, 2);
+        assert.strictEqual(ast.body[0].implements[0].name, 'IBaz');
+        assert.strictEqual(ast.body[0].implements[1].name, 'IFoo');
+    });
+
+    xit ('should parse extends full name qualifier and implements qualifier with multiple types', function () {
+        var ast = parser.parse('class Foo extends ns.org.Bar implements IBaz, IFoo { }');
+        assert.strictEqual(ast.body[0].$type, 'ClassDeclaration');
+        assert.strictEqual(ast.body[0].name, 'Foo');
+        assert.strictEqual(ast.body[0].members.length, 0);
+        assert.strictEqual(ast.body[0].extends.name, 'Baz');
+        assert.strictEqual(ast.body[0].implements.length, 2);
+        assert.strictEqual(ast.body[0].implements[0].name, 'IBaz');
+        assert.strictEqual(ast.body[0].implements[1].name, 'IFoo');
+    });
 });
