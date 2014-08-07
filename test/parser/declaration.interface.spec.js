@@ -5,14 +5,15 @@ describe ('Interface', function () {
 
     it ('should parse an empty interface', function () {
         var ast = parser.parse('interface Foo { }');
-        assert.strictEqual(ast.body[0].$type, 'InterfaceDeclaration');
+        assert.strictEqual(ast.body[0].$type, 'ClassDeclaration');
         assert.strictEqual(ast.body[0].name, 'Foo');
         assert.strictEqual(ast.body[0].members.length, 0);
     });
 
     it ('should parse a interface with one attribute', function () {
         var ast = parser.parse('interface Foo { age: int; }');
-        assert.strictEqual(ast.body[0].$type, 'InterfaceDeclaration');
+        assert.strictEqual(ast.body[0].$type, 'ClassDeclaration');
+        assert.strictEqual(ast.body[0].isInterface, true);
         assert.strictEqual(ast.body[0].name, 'Foo');
         assert.strictEqual(ast.body[0].members.length, 1);
         assert.strictEqual(ast.body[0].members[0].$type, 'ClassAttribute');
@@ -22,7 +23,8 @@ describe ('Interface', function () {
 
     it ('should parse a interface with one method', function () {
         var ast = parser.parse('interface Foo { getAge() {1+1;} }');
-        assert.strictEqual(ast.body[0].$type, 'InterfaceDeclaration');
+        assert.strictEqual(ast.body[0].$type, 'ClassDeclaration');
+        assert.strictEqual(ast.body[0].isInterface, true);
         assert.strictEqual(ast.body[0].name, 'Foo');
         assert.strictEqual(ast.body[0].members.length, 1);
         assert.strictEqual(ast.body[0].members[0].$type, 'ClassMethod');
@@ -33,7 +35,8 @@ describe ('Interface', function () {
 
     it ('should parse a interface with two methods', function () {
         var ast = parser.parse('interface Foo { getAge() {1+1;} getName(): string {4;} }');
-        assert.strictEqual(ast.body[0].$type, 'InterfaceDeclaration');
+        assert.strictEqual(ast.body[0].$type, 'ClassDeclaration');
+        assert.strictEqual(ast.body[0].isInterface, true);
         assert.strictEqual(ast.body[0].name, 'Foo');
         assert.strictEqual(ast.body[0].members.length, 2);
         assert.strictEqual(ast.body[0].members[0].$type, 'ClassMethod');

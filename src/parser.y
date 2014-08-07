@@ -111,8 +111,6 @@ DeclarationStatement
         {$$ = $1;}
     | NamespaceDeclaration
         {$$ = $1;}
-    | InterfaceDeclaration
-        {$$ = $1;}
     | VariableDeclaration
         {$$ = $1;}
     | ConstantDeclaration
@@ -209,14 +207,21 @@ NamespaceDeclaration
     ;
 
 ClassDeclaration
-    : CLASS IDENTIFIER '{' '}'
-        {$$ = yy.node.ClassDeclaration($2, []);}
-    | CLASS IDENTIFIER '{' ClassMemberList '}'
-        {$$ = yy.node.ClassDeclaration($2, $4);}
-    | CLASS IDENTIFIER TypeInheritance '{' '}'
-        {$$ = yy.node.ClassDeclaration($2, [], $3.extends, $3.implements);}
-    | CLASS IDENTIFIER TypeInheritance '{' ClassMemberList '}'
-        {$$ = yy.node.ClassDeclaration($2, $5);}
+    : TypeKeyword IDENTIFIER '{' '}'
+        {$$ = yy.node.ClassDeclaration($1, $2, []);}
+    | TypeKeyword IDENTIFIER '{' ClassMemberList '}'
+        {$$ = yy.node.ClassDeclaration($1, $2, $4);}
+    | TypeKeyword IDENTIFIER TypeInheritance '{' '}'
+        {$$ = yy.node.ClassDeclaration($1, $2, [], $3.extends, $3.implements);}
+    | TypeKeyword IDENTIFIER TypeInheritance '{' ClassMemberList '}'
+        {$$ = yy.node.ClassDeclaration($1, $2, $5);}
+    ;
+
+TypeKeyword
+    : CLASS
+        {$$ = 'class';}
+    | INTERFACE
+        {$$ = 'interface';}
     ;
 
 TypeInheritance
@@ -241,13 +246,6 @@ TypeInheritance
                 implements: $4
             }
         }
-    ;
-
-InterfaceDeclaration
-    : INTERFACE IDENTIFIER '{' '}'
-        {$$ = yy.node.InterfaceDeclaration($2, []);}
-    | INTERFACE IDENTIFIER '{' ClassMemberList '}'
-        {$$ = yy.node.InterfaceDeclaration($2, $4);}
     ;
 
 NamespacePath

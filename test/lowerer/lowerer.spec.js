@@ -38,7 +38,7 @@ describe ('Lowerer', function () {
         describe ('Compound', function () {
 
             it ('should put a name on a namespace', function (done) {
-                var namespaceBody = nodes.ClassDeclaration('Foo', []);
+                var namespaceBody = nodes.ClassDeclaration('class', 'Foo', []);
                 var node = nodes.Program(
                     [
                         nodes.NamespaceDeclaration(
@@ -53,7 +53,7 @@ describe ('Lowerer', function () {
             });
 
             it ('should make multiple namespaces from one compound namespace', function (done) {
-                var namespaceBody = nodes.ClassDeclaration('Foo', []);
+                var namespaceBody = nodes.ClassDeclaration('class', 'Foo', []);
                 var node = nodes.Program(
                     [
                         nodes.NamespaceDeclaration(
@@ -76,7 +76,7 @@ describe ('Lowerer', function () {
         describe ('Indexing in namespace', function () {
 
             it ('should index classes in namespaces', function (done) {
-                var classNode = nodes.ClassDeclaration('Foo', []);
+                var classNode = nodes.ClassDeclaration('class', 'Foo', []);
                 var namespaceNode = nodes.NamespaceDeclaration(['ns'], [classNode]);
                 var node = nodes.Program([namespaceNode]);
                 lowerer.process(node);
@@ -88,7 +88,7 @@ describe ('Lowerer', function () {
         describe ('Interface', function () {
 
             it ('should convert InterfaceDeclaration to ClassDeclaration with interface flag', function () {
-                var interfaceNode = nodes.InterfaceDeclaration('IFoo', []);
+                var interfaceNode = nodes.ClassDeclaration('interface', 'IFoo', []);
                 var namespaceNode = nodes.NamespaceDeclaration(['ns'], [interfaceNode]);
                 var node = nodes.Program([namespaceNode]);
                 lowerer.process(node);
@@ -105,7 +105,7 @@ describe ('Lowerer', function () {
 
             it ('should index the class attributes in current class', function (done) {
                 var attributeNode = nodes.ClassAttribute('attr', null);
-                var classNode = nodes.ClassDeclaration('foo', [attributeNode]);
+                var classNode = nodes.ClassDeclaration('class', 'foo', [attributeNode]);
                 var node = nodes.Program([
                     nodes.NamespaceDeclaration(['foo'], [classNode])
                 ]);
@@ -122,7 +122,7 @@ describe ('Lowerer', function () {
 
             it ('should index methods in current class', function (done) {
                 var methodNode = nodes.ClassMethod('myMethod', null, [], []);
-                var classNode = nodes.ClassDeclaration('foo', [methodNode]);
+                var classNode = nodes.ClassDeclaration('class', 'foo', [methodNode]);
                 var node = nodes.Program([
                     nodes.NamespaceDeclaration(['foo'], [classNode])
                 ]);
@@ -136,7 +136,7 @@ describe ('Lowerer', function () {
 
             it ('should add a reference to the class in the method', function (done) {
                 var methodNode = nodes.ClassMethod('myMethod', null, [], []);
-                var classNode = nodes.ClassDeclaration('foo', [methodNode]);
+                var classNode = nodes.ClassDeclaration('class', 'foo', [methodNode]);
                 var node = nodes.Program([
                     nodes.NamespaceDeclaration(['foo'], [classNode])
                 ]);

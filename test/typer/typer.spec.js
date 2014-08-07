@@ -20,14 +20,14 @@ describe ('Typer', function () {
     beforeEach(function () {
         typer = new Typer(new Walker());
 
-        boolClass = nodes.ClassDeclaration('bool', []);
-        int32Class = nodes.ClassDeclaration('int', []);
-        int64Class = nodes.ClassDeclaration('long', []);
-        uint32Class = nodes.ClassDeclaration('uint', []);
-        uint64Class = nodes.ClassDeclaration('long', []);
-        float32Class = nodes.ClassDeclaration('long', []);
-        float64Class = nodes.ClassDeclaration('long', []);
-        stringClass = nodes.ClassDeclaration('string', []);
+        boolClass = nodes.ClassDeclaration('class', 'bool', []);
+        int32Class = nodes.ClassDeclaration('class', 'int', []);
+        int64Class = nodes.ClassDeclaration('class', 'long', []);
+        uint32Class = nodes.ClassDeclaration('class', 'uint', []);
+        uint64Class = nodes.ClassDeclaration('class', 'long', []);
+        float32Class = nodes.ClassDeclaration('class', 'long', []);
+        float64Class = nodes.ClassDeclaration('class', 'long', []);
+        stringClass = nodes.ClassDeclaration('class', 'string', []);
 
         typer.setType('bool', boolClass);
         typer.setType('int32', int32Class);
@@ -38,13 +38,13 @@ describe ('Typer', function () {
         typer.setType('float64', float64Class);
         typer.setType('string', stringClass);
 
-        baseClass = nodes.ClassDeclaration('Base', []);
-        subClass = nodes.ClassDeclaration('Sub', []);
+        baseClass = nodes.ClassDeclaration('class', 'Base', []);
+        subClass = nodes.ClassDeclaration('class', 'Sub', []);
     });
 
     var helperClass = function (nsName, clsName, mName, mContent) {
         var mth = nodes.ClassMethod(mName, null, [], mContent);
-        var cls = nodes.ClassDeclaration(clsName, [mth]);
+        var cls = nodes.ClassDeclaration('class', clsName, [mth]);
         var ns = nodes.NamespaceDeclaration([nsName], [cls]);
         return {
             p: nodes.Program([ns]),
@@ -318,10 +318,6 @@ describe ('Typer', function () {
     });
 
     describe('UnaryExpression', function () {
-        // Nothing to do there, lowering pass removes those nodes
-    });
-
-    describe('InterfaceDeclaration', function () {
         // Nothing to do there, lowering pass removes those nodes
     });
 

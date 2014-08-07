@@ -86,7 +86,7 @@ describe ('Walker Declarations', function () {
 
     it ('should walk empty ClassDeclaration', function (done) {
         var counter = 0;
-        var node = nodes.ClassDeclaration('Foo', []);
+        var node = nodes.ClassDeclaration('class', 'Foo', []);
         walker.setDelegate({
             ClassDeclarationEnter: function () {
                 try {
@@ -97,30 +97,6 @@ describe ('Walker Declarations', function () {
                 }
             },
             ClassDeclarationLeave: function () {
-                try {
-                    assert.equal(counter, 1);
-                    done();
-                } catch (err) {
-                    done(err);
-                }
-            }
-        });
-        walker.walk(node);
-    });
-
-    it ('should walk empty InterfaceDeclaration', function (done) {
-        var counter = 0;
-        var node = nodes.InterfaceDeclaration('IFoo', []);
-        walker.setDelegate({
-            InterfaceDeclarationEnter: function () {
-                try {
-                    assert.equal(counter, 0);
-                    counter++;
-                } catch (err) {
-                    done(err);
-                }
-            },
-            InterfaceDeclarationLeave: function () {
                 try {
                     assert.equal(counter, 1);
                     done();
@@ -244,7 +220,7 @@ describe ('Walker Declarations', function () {
 
     it ('should walk ClassDeclaration', function (done) {
         var counter = 0;
-        var node = nodes.ClassDeclaration('Foo', [
+        var node = nodes.ClassDeclaration('class', 'Foo', [
             nodes.ClassAttribute('value', null),
             nodes.ClassMethod(
                 'getValue',
@@ -345,7 +321,7 @@ describe ('Walker Declarations', function () {
         var counter = 0;
         var node = nodes.NamespaceDeclaration(
             ['com', 'namespace'],
-            [nodes.ClassDeclaration('Foo', [])]
+            [nodes.ClassDeclaration('class', 'Foo', [])]
         );
         walker.setDelegate({
             NamespaceDeclarationEnter: function (node) {
