@@ -91,13 +91,13 @@ describe ('Lowerer', function () {
         describe ('Indexing', function () {
 
             it ('should index the class attributes in current class', function (done) {
-                var attributeNode = nodes.ClassAttribute('attr', null);
+                var attributeNode = nodes.MemberDeclaration('attribute', 'attr', null);
                 var classNode = nodes.ClassDeclaration('class', 'foo', [attributeNode]);
                 var node = nodes.Program([
                     nodes.NamespaceDeclaration(['foo'], [classNode])
                 ]);
                 lowerer.process(node);
-                assert.equal(classNode.attributes['attr'], attributeNode);
+                assert.equal(classNode.membersByName['attr'], attributeNode);
                 done();
             });
         });
@@ -108,13 +108,13 @@ describe ('Lowerer', function () {
         describe ('Indexing', function () {
 
             it ('should index methods in current class', function (done) {
-                var methodNode = nodes.ClassMethod('myMethod', null, [], []);
+                var methodNode = nodes.MemberDeclaration('method', 'myMethod', null, [], []);
                 var classNode = nodes.ClassDeclaration('class', 'foo', [methodNode]);
                 var node = nodes.Program([
                     nodes.NamespaceDeclaration(['foo'], [classNode])
                 ]);
                 lowerer.process(node);
-                assert.equal(classNode.methods['myMethod'], methodNode);
+                assert.equal(classNode.membersByName['myMethod'], methodNode);
                 done();
             });
         });
@@ -122,7 +122,7 @@ describe ('Lowerer', function () {
         describe ('Reference to class', function () {
 
             it ('should add a reference to the class in the method', function (done) {
-                var methodNode = nodes.ClassMethod('myMethod', null, [], []);
+                var methodNode = nodes.MemberDeclaration('method', 'myMethod', null, [], []);
                 var classNode = nodes.ClassDeclaration('class', 'foo', [methodNode]);
                 var node = nodes.Program([
                     nodes.NamespaceDeclaration(['foo'], [classNode])

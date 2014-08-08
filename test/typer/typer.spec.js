@@ -43,7 +43,7 @@ describe ('Typer', function () {
     });
 
     var helperClass = function (nsName, clsName, mName, mContent) {
-        var mth = nodes.ClassMethod(mName, null, [], mContent);
+        var mth = nodes.MemberDeclaration('method', mName, null, [], mContent);
         var cls = nodes.ClassDeclaration('class', clsName, [mth]);
         var ns = nodes.NamespaceDeclaration([nsName], [cls]);
         return {
@@ -285,21 +285,23 @@ describe ('Typer', function () {
         });
     });
 
-    describe('ClassAttribute', function () {
+    describe('MemberDeclaration', function () {
 
-        xit ('should infer type from initial value if not null', function () {
+        describe('Method', function () {
+            xit ('should infer type from initial value if not null', function () {
 
+            });
+
+            xit ('should check if the attribute has a correct type', function () {
+
+            });
         });
 
-        xit ('should check if the attribute has a correct type', function () {
+        describe('Attribute', function () {
 
-        });
-    });
+            xit ('should check if the method has a correct type', function () {
 
-    describe('ClassMethod', function () {
-
-        xit ('should check if the method has a correct type', function () {
-
+            });
         });
     });
 

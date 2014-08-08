@@ -76,7 +76,7 @@ describe ('Walker Misc', function () {
     });
 
     it ('should call onUnknown if method not present', function (done) {
-        var node = nodes.ClassAttribute('foo', null);
+        var node = nodes.MemberDeclaration('attribute', 'foo', null);
         var callDone = false;
         walker.setDelegate({
             onUnknown: function (pNode) {

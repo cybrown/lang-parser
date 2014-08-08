@@ -9,7 +9,8 @@ describe ('Class Method', function () {
         assert.strictEqual(ast.body[0].isClass, true);
         assert.strictEqual(ast.body[0].name, 'Foo');
         assert.strictEqual(ast.body[0].members.length, 1);
-        assert.strictEqual(ast.body[0].members[0].$type, 'ClassMethod');
+        assert.strictEqual(ast.body[0].members[0].$type, 'MemberDeclaration');
+        assert.strictEqual(ast.body[0].members[0].isMethod, true);
         assert.strictEqual(ast.body[0].members[0].returnType, null);
         assert.strictEqual(ast.body[0].members[0].name, 'getAge');
         assert.strictEqual(ast.body[0].members[0].params.length, 0);
@@ -21,7 +22,8 @@ describe ('Class Method', function () {
         assert.strictEqual(ast.body[0].$type, 'ClassDeclaration');
         assert.strictEqual(ast.body[0].name, 'Foo');
         assert.strictEqual(ast.body[0].members.length, 1);
-        assert.strictEqual(ast.body[0].members[0].$type, 'ClassMethod');
+        assert.strictEqual(ast.body[0].members[0].$type, 'MemberDeclaration');
+        assert.strictEqual(ast.body[0].members[0].isMethod, true);
         assert.strictEqual(ast.body[0].members[0].returnType.name, 'int');
         assert.strictEqual(ast.body[0].members[0].name, 'getAge');
         assert.strictEqual(ast.body[0].members[0].params.length, 0);
@@ -33,7 +35,8 @@ describe ('Class Method', function () {
         assert.strictEqual(ast.body[0].$type, 'ClassDeclaration');
         assert.strictEqual(ast.body[0].name, 'Foo');
         assert.strictEqual(ast.body[0].members.length, 1);
-        assert.strictEqual(ast.body[0].members[0].$type, 'ClassMethod');
+        assert.strictEqual(ast.body[0].members[0].$type, 'MemberDeclaration');
+        assert.strictEqual(ast.body[0].members[0].isMethod, true);
         assert.strictEqual(ast.body[0].members[0].returnType, null);
         assert.strictEqual(ast.body[0].members[0].name, 'getAge');
         assert.strictEqual(ast.body[0].members[0].params.length, 1);
@@ -47,7 +50,8 @@ describe ('Class Method', function () {
         assert.strictEqual(ast.body[0].$type, 'ClassDeclaration');
         assert.strictEqual(ast.body[0].name, 'Foo');
         assert.strictEqual(ast.body[0].members.length, 1);
-        assert.strictEqual(ast.body[0].members[0].$type, 'ClassMethod');
+        assert.strictEqual(ast.body[0].members[0].$type, 'MemberDeclaration');
+        assert.strictEqual(ast.body[0].members[0].isMethod, true);
         assert.strictEqual(ast.body[0].members[0].returnType, null);
         assert.strictEqual(ast.body[0].members[0].name, 'getAge');
         assert.strictEqual(ast.body[0].members[0].params.length, 2);
@@ -63,7 +67,8 @@ describe ('Class Method', function () {
         assert.strictEqual(ast.body[0].$type, 'ClassDeclaration');
         assert.strictEqual(ast.body[0].name, 'Foo');
         assert.strictEqual(ast.body[0].members.length, 1);
-        assert.strictEqual(ast.body[0].members[0].$type, 'ClassMethod');
+        assert.strictEqual(ast.body[0].members[0].$type, 'MemberDeclaration');
+        assert.strictEqual(ast.body[0].members[0].isMethod, true);
         assert.strictEqual(ast.body[0].members[0].returnType.name, 'int');
         assert.strictEqual(ast.body[0].members[0].name, 'getAge');
         assert.strictEqual(ast.body[0].members[0].params.length, 1);

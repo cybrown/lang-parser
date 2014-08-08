@@ -132,19 +132,20 @@ describe ('Walker Declarations', function () {
         walker.walk(node);
     });
 
-    it ('should walk ClassMethod', function (done) {
+    it ('should walk MemberDeclaration', function (done) {
         var counter = 0;
-        var node = nodes.ClassMethod(
+        var node = nodes.MemberDeclaration(
+            'method',
             'getValue',
             null,
             [nodes.MethodParameter('x', null)],
             nodes.ExpressionStatement(nodes.BinaryExpression('+', null, null))
         );
         walker.setDelegate({
-            ClassMethodEnter: function (node) {
+            MemberDeclarationEnter: function (node) {
                 try {
                     assert.equal(counter, 0);
-                    assert.equal(node.$type, 'ClassMethod');
+                    assert.equal(node.$type, 'MemberDeclaration');
                     counter++;
                 } catch (err) {
                     done(err);
@@ -182,7 +183,7 @@ describe ('Walker Declarations', function () {
                     done(err);
                 }
             },
-            ClassMethodLeave: function (node) {
+            MemberDeclarationLeave: function (node) {
                 try {
                     assert.equal(counter, 5);
                     done();
@@ -194,11 +195,11 @@ describe ('Walker Declarations', function () {
         walker.walk(node);
     });
 
-    it ('should walk ClassAttribute', function (done) {
+    it ('should walk MemberDeclaration', function (done) {
         var counter = 0;
-        var node = nodes.ClassAttribute('foo', null);
+        var node = nodes.MemberDeclaration('attribute', 'foo', null);
         walker.setDelegate({
-            ClassAttributeEnter: function (node) {
+            MemberDeclarationEnter: function (node) {
                 try {
                     assert.equal(counter, 0);
                     counter++;
@@ -206,7 +207,7 @@ describe ('Walker Declarations', function () {
                     done(err);
                 }
             },
-            ClassAttributeLeave: function (node) {
+            MemberDeclarationLeave: function (node) {
                 try {
                     assert.equal(counter, 1);
                     done();
@@ -221,8 +222,9 @@ describe ('Walker Declarations', function () {
     it ('should walk ClassDeclaration', function (done) {
         var counter = 0;
         var node = nodes.ClassDeclaration('class', 'Foo', [
-            nodes.ClassAttribute('value', null),
-            nodes.ClassMethod(
+            nodes.MemberDeclaration('attribute', 'value', null),
+            nodes.MemberDeclaration(
+                'method',
                 'getValue',
                 null,
                 [nodes.MethodParameter('x', null)],
@@ -238,30 +240,29 @@ describe ('Walker Declarations', function () {
                     done(err);
                 }
             },
-            ClassAttributeEnter: function (node) {
-                try {
-                    assert.equal(counter, 1);
-                    counter++;
-                } catch (err) {
-                    done(err);
-                }
+            MemberDeclarationEnter: function (node) {
+
             },
-            ClassAttributeLeave: function (node) {
-                try {
-                    assert.equal(counter, 2);
-                    counter++;
-                } catch (err) {
-                    done(err);
-                }
+            MemberDeclarationLeave: function (node) {
+
             },
-            ClassMethodEnter: function (node) {
-                try {
-                    assert.equal(counter, 3);
-                    assert.equal(node.$type, 'ClassMethod');
-                    assert.equal(node.name, 'getValue');
-                    counter++;
-                } catch (err) {
-                    done(err);
+            MemberDeclarationEnter: function (node) {
+                if (node.isAttribute) {
+                    try {
+                        assert.equal(counter, 1);
+                        counter++;
+                    } catch (err) {
+                        done(err);
+                    }
+                } else if (node.isMethod) {
+                    try {
+                        assert.equal(counter, 3);
+                        assert.equal(node.$type, 'MemberDeclaration');
+                        assert.equal(node.name, 'getValue');
+                        counter++;
+                    } catch (err) {
+                        done(err);
+                    }
                 }
             },
             MethodParameterEnter: function (node) {
@@ -297,12 +298,21 @@ describe ('Walker Declarations', function () {
                     done(err);
                 }
             },
-            ClassMethodLeave: function (node) {
-                try {
-                    assert.equal(counter, 8);
-                    counter++;
-                } catch (err) {
-                    done(err);
+            MemberDeclarationLeave: function (node) {
+                if (node.isAttribute) {
+                    try {
+                        assert.equal(counter, 2);
+                        counter++;
+                    } catch (err) {
+                        done(err);
+                    }
+                } else if (node.isMethod) {
+                    try {
+                        assert.equal(counter, 8);
+                        counter++;
+                    } catch (err) {
+                        done(err);
+                    }
                 }
             },
             ClassDeclarationLeave: function () {

@@ -281,18 +281,18 @@ ClassMember
 
 ClassAttribute
     : IDENTIFIER ':' Type ';'
-        {$$ = yy.node.ClassAttribute($1, $3);}
+        {$$ = yy.node.MemberDeclaration('attribute', $1, $3);}
     ;
 
 ClassMethod
     : IDENTIFIER '(' ')' BlockStatement
-        {$$ = yy.node.ClassMethod($1, null, [], $4);}
+        {$$ = yy.node.MemberDeclaration('method', $1, null, [], $4);}
     | IDENTIFIER '(' MethodParameterList ')' BlockStatement
-        {$$ = yy.node.ClassMethod($1, null, $3, $5);}
+        {$$ = yy.node.MemberDeclaration('method', $1, null, $3, $5);}
     | IDENTIFIER '(' ')' ':' Type BlockStatement
-        {$$ = yy.node.ClassMethod($1, $5, [], $6);}
+        {$$ = yy.node.MemberDeclaration('method', $1, $5, [], $6);}
     | IDENTIFIER '(' MethodParameterList ')' ':' Type BlockStatement
-        {$$ = yy.node.ClassMethod($1, $6, $3, $7);}
+        {$$ = yy.node.MemberDeclaration('method', $1, $6, $3, $7);}
     ;
 
 MethodParameterList
